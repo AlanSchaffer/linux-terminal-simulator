@@ -16,7 +16,7 @@ Based on a **Debian GNU/Linux** environment, the simulator replicates system fil
 To access the simulator, users are greeted by a retro-style ASCII art login screen mimicking a real Debian tty session:
 
 <p align="center">
-  <img src="login_preview.jpg" alt="Linux Terminal Simulator Login Screen" width="750">
+  <img src="login_preview.png" alt="Linux Terminal Simulator Login Screen" width="750">
 </p>
 
 
