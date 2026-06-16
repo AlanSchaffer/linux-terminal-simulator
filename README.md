@@ -24,7 +24,7 @@ To access the simulator, users are greeted by a retro-style ASCII art login scre
 
 ## 🚀 Live Demo
 Experience the environment online instantly:
-👉 **[Open the Linux Terminal Simulator](https://github.io)**
+👉 **[Open the Linux Terminal Simulator](https://alanschaffer.github.io/linux-terminal-simulator/)**
 
 ---
 
