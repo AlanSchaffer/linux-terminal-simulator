@@ -59,11 +59,24 @@ The core logic parses commands along with flags and basic operators. Current sim
 *   **Vanilla JavaScript (ES6+)** – DOM manipulation mechanics, input parsing engines, and standard data structure VFS mapping.
 
 ---
-
-## 🔧 Future Roadmap (Current Version: Beta)
+## 🔧 Future Roadmap (Current Version: Alpha)
 This simulator is under active development. The upcoming milestones include:
 
 - [ ] **Advanced Theme Engine:** Implementation of a visual customization suite, introducing popular community themes like **Dracula**, Nord, Gruvbox, and Monokai.
 - [ ] **Interactive Utilities:** Simulating full-screen interactive binaries such as a light version of the `nano` or `vim` editors.
 - [ ] **Enhanced Shell Operators:** Expanding logic chain operators to support deep output redirections.
 
+### 📚 Learning & Training
+A dedicated learning environment designed to help users master the Web Terminal through guided lessons, practical exercises, command references, and interactive challenges.
+
+- [ ] **Terminal Learning Hub:** Step-by-step tutorials covering essential and advanced shell commands.
+- [ ] **Interactive Exercises:** Hands-on scenarios to practice navigation, file management, pipelines, permissions, and scripting.
+- [ ] **Command Reference Center:** Built-in documentation and examples for supported commands.
+
+### 🐳 Virtual Container Environment
+A safe and isolated environment for experimenting with containerized workflows directly within the simulator.
+
+- [ ] **Virtual Docker System:** Simulated Docker environment supporting common container management commands and workflows.
+- [ ] **Container Lifecycle Management:** Create, start, stop, inspect, and remove virtual containers.
+- [ ] **Image Simulation:** Pull, build, list, and manage virtual container images.
+- [ ] **Sandboxed Development Environment:** Practice container-based development without requiring Docker installation on the host system.
