@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="es-US">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +10,24 @@
 
     <!-- ── LOGIN SCREEN ── -->
     <div id="login-screen">
+         <!-- THEMES -->
+    <div id="theme-selector">
+        <span class="theme-label">Themes</span>
+        <span class="theme-icon">⚙</span>
+        <div class="theme-dropdown">
+            <button onclick="setTheme('default')">Default</button>
+            <button onclick="setTheme('dracula')">Dracula</button>
+            <button onclick="setTheme('gruvbox')">Gruvbox</button>
+            <button onclick="setTheme('matrix')">Matrix</button>
+        </div>
+    </div>
+    <!-- LERNING MODE -->
+<div id="learning-btn" onclick="alert('Under construction, learning mode coming soon!')">
+    <span class="learning-icon">📖</span>
+    <span class="learning-label">Learn</span>
+</div>
+
+
         <pre class="login-art">    _  _    ___   _____
    | || |  / _ \ |___ /
    | || |_| | | |  |_ \
@@ -18,6 +36,7 @@ _____ |_|  \___/ |____/</pre>
         <p class="login-info">_403 Terminal</p>
         <p class="login-info">Kernel 6.1.0-18-amd64 on an x86_64</p>
         <br>
+        <p class="version">Version: A_2.0 (Alpha) </p>
         <div class="login-line">
             <span class="login-label">login: </span>
             <input type="text" id="login-input" autofocus autocomplete="off" spellcheck="false">

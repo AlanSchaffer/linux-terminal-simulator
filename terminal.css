@@ -1,5 +1,48 @@
+/* ── THEME VARIABLE (default: Dark/Debian) ───────────────── */
+:root {
+    --bg-color: #0d0d0d;
+    --text-color: #f0f0f0;
+    --art-color: #cc0000;
+    --accent-color: #50fa7b;
+    --info-color: #8be9fd;
+    --warn-color: #ffb86c;
+    --muted-color: #aaaaaa;
+}
 
+/* Theme Dracula */
+.theme-dracula {
+    --bg-color: #282a36;
+    --text-color: #f8f8f2;
+    --art-color: #ff79c6;
+    --accent-color: #50fa7b;
+    --info-color: #8be9fd;
+    --warn-color: #ffb86c;
+    --muted-color: #6272a4;
+}
 
+/* Theme Gruvbox */
+.theme-gruvbox {
+    --bg-color: #282828;
+    --text-color: #ebdbb2;
+    --art-color: #cc241d;
+    --accent-color: #b8bb26;
+    --info-color: #83a598;
+    --warn-color: #fabd2f;
+    --muted-color: #928374;
+}
+
+/* Theme Matrix (Classic Green) */
+.theme-matrix {
+    --bg-color: #000000;
+    --text-color: #00ff00;
+    --art-color: #00ff00;
+    --accent-color: #00ff00;
+    --info-color: #008000;
+    --warn-color: #00ff00;
+    --muted-color: #005f00;
+}
+
+/* ── ALL SETTINGS ──────────────────────────────────── */
 * {
     margin: 0;
     padding: 0;
@@ -7,16 +50,88 @@
 }
 
 body {
-    background-color: #0d0d0d;
-    color: #f0f0f0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
     height: 100vh;
     overflow: hidden;
 }
 
-/* ── LOGIN SCREEN ──────────────────────────────────────────── */
+/* ── THEME MENU (GEAR) ────────────────── */
+#theme-selector {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 1000;
+    cursor: pointer;
+}
 
+.theme-label {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    color: var(--muted-color);
+    transition: color 0.2s;
+}
+
+.theme-icon {
+    font-size: 18px;
+    color: var(--muted-color);
+    transition: color 0.2s, transform 0.3s;
+}
+
+/* Efeito hover para acender o label e o ícone juntos */
+#theme-selector:hover .theme-label {
+    color: var(--text-color);
+}
+
+#theme-selector:hover .theme-icon {
+    color: var(--text-color);
+    transform: rotate(45deg);
+}
+
+.theme-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 24px;
+    background-color: var(--bg-color);
+    border: 1px solid var(--muted-color);
+    padding: 6px 0;
+    min-width: 120px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.theme-dropdown button {
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+    background-color: rgba(13, 13, 13, 0.85); /* Deixa o fundo levemente transparente */
+    backdrop-filter: blur(8px); /* Desfoca o que está atrás do menu */
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.theme-dropdown button.open {
+    background-color: var(--muted-color);
+    color: var(--bg-color);
+}
+
+#theme-selector:hover .theme-dropdown {
+    display: block;
+}
+
+
+/* ── LOGIN SCREEN ──────────────────────────────────────────── */
 #login-screen {
     display: flex;
     flex-direction: column;
@@ -25,20 +140,28 @@ body {
     height: 100vh;
     padding: 48px;
     user-select: none;
+    position: relative;
 }
 
 .login-art {
-    color: #cc0000;
+    color: var(--art-color);
     font-size: 12px;
     white-space: pre;
     line-height: 1.3;
     margin-bottom: 20px;
-    text-shadow: 0 0 8px #cc000066;
+    text-shadow: 0 0 8px rgba(204,0,0,0.4);
     text-align: center;
 }
 
 .login-info {
-    color: #aaaaaa;
+    color: var(--muted-color);
+    margin-bottom: 3px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.version {
+    color: var(--muted-color);
     margin-bottom: 3px;
     font-size: 13px;
     text-align: center;
@@ -52,23 +175,22 @@ body {
 }
 
 .login-label {
-    color: #f0f0f0;
+    color: var(--text-color);
     white-space: nowrap;
 }
 
 #login-input {
     background: transparent;
     border: none;
-    color: #50fa7b;
+    color: var(--accent-color);
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
     outline: none;
-    caret-color: #50fa7b;
+    caret-color: var(--accent-color);
     width: 220px;
 }
 
 /* ── TERMINAL SCREEN ───────────────────────────────────────── */
-
 #terminal-screen {
     display: none;
     flex-direction: column;
@@ -95,7 +217,6 @@ body {
 }
 
 /* ── PROMPT LINE ───────────────────────────────────────────── */
-
 .line {
     display: flex;
     align-items: center;
@@ -109,28 +230,27 @@ body {
     margin-right: 4px;
 }
 
-.p-user  { color: #50fa7b; }
-.p-at    { color: #f8f8f2; }
-.p-host  { color: #8be9fd; }
-.p-path  { color: #ffb86c; }
-.p-dollar{ color: #f8f8f2; }
+.p-user   { color: var(--accent-color); }
+.p-at     { color: var(--text-color); }
+.p-host   { color: var(--info-color); }
+.p-path   { color: var(--warn-color); }
+.p-dollar { color: var(--text-color); }
 
 .line input {
     background: transparent;
     border: none;
-    color: #f0f0f0;
+    color: var(--text-color);
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
     outline: none;
     flex: 1;
     min-width: 0;
-    caret-color: #f0f0f0;
+    caret-color: var(--text-color);
 }
 
 /* ── OUTPUT ────────────────────────────────────────────────── */
-
 .output {
-    color: #f0f0f0;
+    color: var(--text-color);
     white-space: pre-wrap;
     word-break: break-word;
     line-height: 1.5;
@@ -140,12 +260,47 @@ body {
 }
 
 .output.err  { color: #ff5555; }
-.output.ok   { color: #50fa7b; }
-.output.info { color: #8be9fd; }
-.output.warn { color: #ffb86c; }
+.output.ok   { color: var(--accent-color); }
+.output.info { color: var(--info-color); }
+.output.warn { color: var(--warn-color); }
 
 .welcome {
-    color: #50fa7b;
+    color: var(--accent-color);
     white-space: pre;
     margin-bottom: 6px;
+}
+
+/* ── LEARN BUTTON (LEFT SIDE) ───────────── */
+#learning-btn {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.learning-label {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    color: var(--muted-color);
+    transition: color 0.2s;
+}
+
+.learning-icon {
+    font-size: 18px;
+    color: var(--muted-color);
+    transition: color 0.2s, transform 0.2s;
+}
+
+/* hover effect to turn on the button */
+#learning-btn:hover .learning-label {
+    color: var(--text-color);
+}
+
+#learning-btn:hover .learning-icon {
+    color: var(--text-color);
+    transform: scale(1.1);
 }
