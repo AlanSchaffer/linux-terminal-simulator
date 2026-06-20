@@ -59,12 +59,18 @@ The core logic parses commands along with flags and basic operators. Current sim
 *   **Vanilla JavaScript (ES6+)** – DOM manipulation mechanics, input parsing engines, and standard data structure VFS mapping.
 
 ---
-## 🔧 Future Roadmap (Current Version: Alpha)
+## 🔧 Future Roadmap (Current Version: A_2.0)
 This simulator is under active development. The upcoming milestones include:
 
-- [ ] **Advanced Theme Engine:** Implementation of a visual customization suite, introducing popular community themes like **Dracula**, Nord, Gruvbox, and Monokai.
+- [X] **Advanced Theme Engine:** Implementation of a visual customization suite, introducing popular community themes like **Dracula**, Nord, Gruvbox, and Matrix.
 - [ ] **Interactive Utilities:** Simulating full-screen interactive binaries such as a light version of the `nano` or `vim` editors.
 - [ ] **Enhanced Shell Operators:** Expanding logic chain operators to support deep output redirections.
+
+### 🌐 Internationalization & Localization
+A native localization engine to make the terminal accessible globally, changing system readmes, configurations, and commands on the fly.
+
+- [ ] **Multi-language System:** Clean dropdown menu interface featuring **English (Default)**, **Português**, and **Español**.
+- [ ] **Localized Content:** Dynamically translates system outputs, helper documents (`readme.txt`), and learning modules based on the selected locale.
 
 ### 📚 Learning & Training
 A dedicated learning environment designed to help users master the Web Terminal through guided lessons, practical exercises, command references, and interactive challenges.
@@ -75,6 +81,11 @@ A dedicated learning environment designed to help users master the Web Terminal 
 
 ### 🐳 Virtual Container Environment
 A safe and isolated environment for experimenting with containerized workflows directly within the simulator.
+
+- [ ] **Virtual Docker System:** Simulated Docker environment supporting common container management commands and workflows.
+- [ ] **Container Lifecycle Management:** Create, start, stop, inspect, and remove virtual containers.
+- [ ] **Image Simulation:** Pull, build, list, and manage virtual container images.
+- [ ] **Sandboxed Development Environment:** Practice container-based development without requiring Docker installation on the host system.
 
 - [ ] **Virtual Docker System:** Simulated Docker environment supporting common container management commands and workflows.
 - [ ] **Container Lifecycle Management:** Create, start, stop, inspect, and remove virtual containers.
