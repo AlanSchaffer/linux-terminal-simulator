@@ -1435,7 +1435,8 @@ ${pkgs} packages can be upgraded. Run 'apt list --upgradable' to see them.`;
         return [` ${border}`, ` ${bubble}`, ` ${border}`, '         \\   ^__^', '          \\  (oo)\\_______', '             (__)\\       )\\/\\', '                 ||----w |', '                 ||     ||'].join('\n');
     }
 
-        case 67: {
+        case 67:
+        case '67':{
         // Alvo do GIF do meme do 67
         const gifUrl = 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2lmOGVvNnRtNzRkeGU2bXBzOWR4eGNvMTJ6eWwwNGdrYWo0eGxtNCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/08uBcURaMq6vA93TGc/giphy.gif';
 
