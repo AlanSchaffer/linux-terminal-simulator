@@ -243,7 +243,7 @@ function newLine() {
     const line = document.createElement('div');
     line.className = 'line';
     line.innerHTML = `<span class="prompt">${promptHTML()}</span>` +
-                     `<input type="text" autocomplete="off" spellcheck="false">`;
+                     `<input type="text" autocomplete="off" spellcheck="false" autocapitalize="none" autocorrect="off">`; +
     $terminal.appendChild(line);
 
     const input = line.querySelector('input');
