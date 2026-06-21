@@ -59,7 +59,7 @@ The core logic parses commands along with flags and basic operators. Current sim
 *   **Vanilla JavaScript (ES6+)** – DOM manipulation mechanics, input parsing engines, and standard data structure VFS mapping.
 
 ---
-## 🔧 Future Roadmap (Current Version: A_2.0)
+## 🔧 Future Roadmap (Current Version: A_2.1)
 This simulator is under active development. The upcoming milestones include:
 
 - [X] **Advanced Theme Engine:** Implementation of a visual customization suite, introducing popular community themes like **Dracula**, Nord, Gruvbox, and Matrix.
