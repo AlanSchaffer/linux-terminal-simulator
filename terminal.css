@@ -1,0 +1,366 @@
+/* ── THEME VARIABLE (default: Dark/Debian) ───────────────── */
+:root {
+    --bg-color: #0d0d0d;
+    --text-color: #f0f0f0;
+    --art-color: #cc0000;
+    --accent-color: #50fa7b;
+    --info-color: #8be9fd;
+    --warn-color: #ffb86c;
+    --muted-color: #aaaaaa;
+}
+
+/* Theme Dracula */
+.theme-dracula {
+    --bg-color: #282a36;
+    --text-color: #f8f8f2;
+    --art-color: #ff79c6;
+    --accent-color: #50fa7b;
+    --info-color: #8be9fd;
+    --warn-color: #ffb86c;
+    --muted-color: #6272a4;
+}
+
+/* Theme Gruvbox */
+.theme-gruvbox {
+    --bg-color: #282828;
+    --text-color: #ebdbb2;
+    --art-color: #cc241d;
+    --accent-color: #b8bb26;
+    --info-color: #83a598;
+    --warn-color: #fabd2f;
+    --muted-color: #928374;
+}
+
+/* Theme Matrix (Classic Green) */
+.theme-matrix {
+    --bg-color: #000000;
+    --text-color: #00ff00;
+    --art-color: #00ff00;
+    --accent-color: #00ff00;
+    --info-color: #008000;
+    --warn-color: #00ff00;
+    --muted-color: #005f00;
+}
+
+/* ── CUSTOMIZAÇÕES EXCLUSIVAS DO TEMA MATRIX ───────────────── */
+
+/* Altera o texto digitado no terminal (linhas ativas e comandos antigos já enviados) */
+.theme-matrix .line input {
+    color: #ffffff !important;
+    caret-color: #00ff00 !important;
+}
+
+/* Altera o texto digitado no campo de login (caso o tema Matrix seja selecionado logo na entrada) */
+.theme-matrix #login-input {
+    color: #ffffff !important;
+    caret-color: #00ff00 !important;
+}
+
+.theme-nord {
+    --bg-color: #2e3440;
+    --text-color: #d8dee9;
+    --art-color: #88c0d0;
+    --accent-color: #a3be8c;
+    --info-color: #81a1c1;
+    --warn-color: #ebcb8b;
+    --muted-color: #4c566a;
+}
+
+.theme-catppuccin {
+    --bg-color: #1e1e2e;
+    --text-color: #cdd6f4;
+    --art-color: #f38ba8;
+    --accent-color: #a6e3a1;
+    --info-color: #89b4fa;
+    --warn-color: #f9e2af;
+    --muted-color: #585b70;
+}
+
+.theme-monokai {
+    --bg-color: #272822;
+    --text-color: #f8f8f2;
+    --art-color: #f92672;
+    --accent-color: #a6e22e;
+    --info-color: #66d9ef;
+    --warn-color: #e6db74;
+    --muted-color: #75715e;
+}
+
+.theme-cyberpunk {
+    --bg-color: #120b29;
+    --text-color: #fdfdfd;
+    --art-color: #ff007f;
+    --accent-color: #00ffcc;
+    --info-color: #00e1ff;
+    --warn-color: #ffb800;
+    --muted-color: #5c457b;
+}
+
+/* ── ALL SETTINGS ──────────────────────────────────── */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    height: 100dvh;
+    overflow: hidden;
+}
+
+/* ── THEME MENU (GEAR) ────────────────── */
+#theme-selector {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.theme-label {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    color: var(--muted-color);
+    transition: color 0.2s;
+}
+
+.theme-icon {
+    font-size: 18px;
+    color: var(--muted-color);
+    transition: color 0.2s, transform 0.3s;
+}
+
+/* Efeito hover para acender o label e o ícone juntos */
+#theme-selector:hover .theme-label {
+    color: var(--text-color);
+}
+
+#theme-selector:hover .theme-icon {
+    color: var(--text-color);
+    transform: rotate(45deg);
+}
+
+.theme-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 24px;
+    background-color: var(--bg-color);
+    border: 1px solid var(--muted-color);
+    padding: 6px 0;
+    min-width: 120px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    
+}
+
+.theme-dropdown button {
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    border: none;
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+    background-color: var(--bg-color);
+    backdrop-filter: blur(8px); /* Desfoca o que está atrás do menu */
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.theme-dropdown button.active::before {
+    content: "* "; /* Adiciona o asterisco de forma minimalista */
+}
+
+.theme-dropdown button.active {
+    color: var(--accent-color); /* Deixa o texto com a cor de destaque do tema atual */
+    font-weight: bold;
+}
+
+#theme-selector.open .theme-dropdown {
+    display: block;
+}
+
+
+/* ── LOGIN SCREEN ──────────────────────────────────────────── */
+#login-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 48px;
+    user-select: none;
+    position: relative;
+}
+
+.login-art {
+    color: var(--art-color);
+    font-size: 12px;
+    white-space: pre;
+    line-height: 1.3;
+    margin-bottom: 20px;
+    text-shadow: 0 0 8px rgba(204,0,0,0.4);
+    text-align: center;
+}
+
+.login-info {
+    color: var(--muted-color);
+    margin-bottom: 3px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.version {
+    color: var(--muted-color);
+    margin-bottom: 3px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.login-line {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    justify-content: center;
+}
+
+.login-label {
+    color: var(--text-color);
+    white-space: nowrap;
+}
+
+#login-input {
+    background: transparent;
+    border: none;
+    color: var(--accent-color);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    outline: none;
+    caret-color: var(--accent-color);
+    width: 220px;
+}
+
+/* ── TERMINAL SCREEN ───────────────────────────────────────── */
+#terminal-screen {
+    display: none;
+    flex-direction: column;
+    height: 100vh;
+    padding: 12px 16px;
+    overflow-y: auto;
+}
+
+#terminal {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+#terminal::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* ── PROMPT LINE ───────────────────────────────────────────── */
+.line {
+    display: flex;
+    align-items: center;
+    margin: 2px 0;
+    flex-wrap: nowrap;
+}
+
+.prompt {
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-right: 4px;
+}
+
+.p-user   { color: var(--accent-color); }
+.p-at     { color: var(--text-color); }
+.p-host   { color: var(--info-color); }
+.p-path   { color: var(--warn-color); }
+.p-dollar { color: var(--text-color); }
+
+.line input {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    outline: none;
+    flex: 1;
+    min-width: 0;
+    caret-color: var(--text-color);
+}
+
+/* ── OUTPUT ────────────────────────────────────────────────── */
+.output {
+    color: var(--text-color);
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.5;
+    margin: 1px 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+}
+
+.output.err  { color: var(--art-color); }
+.output.ok   { color: var(--accent-color); }
+.output.info { color: var(--info-color); }
+.output.warn { color: var(--warn-color); }
+
+.welcome {
+    color: var(--accent-color);
+    white-space: pre;
+    margin-bottom: 6px;
+}
+
+/* ── LEARN BUTTON (LEFT SIDE) ───────────── */
+#learning-btn {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.learning-label {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    color: var(--muted-color);
+    transition: color 0.2s;
+}
+
+.learning-icon {
+    font-size: 18px;
+    color: var(--muted-color);
+    transition: color 0.2s, transform 0.2s;
+}
+
+/* hover effect to turn on the button */
+#learning-btn:hover .learning-label {
+    color: var(--text-color);
+}
+
+#learning-btn:hover .learning-icon {
+    color: var(--text-color);
+    transform: scale(1.1);
+}
+
+#terminal::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+#terminal::-webkit-scrollbar-thumb {
+    background: var(--muted-color);
+    border-radius: 3px;
+}
