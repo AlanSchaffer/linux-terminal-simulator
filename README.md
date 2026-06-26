@@ -19,7 +19,7 @@ Based on a Debian GNU/Linux environment, the simulator replicates system files, 
 ## 🚀 Live Demo
 
 Experience the environment online instantly:
-👉 **[Open the Linux Terminal Simulator](LINK_TO_YOUR_LIVE_DEMO_HERE)**
+👉 **[Open the Linux Terminal Simulator](https://alanschaffer.github.io/linux-terminal-simulator/)**
 
 ---
 
