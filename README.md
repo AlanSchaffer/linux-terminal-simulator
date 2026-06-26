@@ -73,7 +73,7 @@ Since this project is built entirely with Vanilla Web Technologies (HTML, CSS, J
     Simply open the index.html file in your preferred web browser.
     (For the best experience, you can also serve it via VS Code Live Server or any basic HTTP server).
 
-##🛠️ Built With
+## 🛠️ Built With
 
     HTML5 – Application structure and canvas boundaries.
 
@@ -81,7 +81,7 @@ Since this project is built entirely with Vanilla Web Technologies (HTML, CSS, J
 
     Vanilla JavaScript (ES6+) – DOM manipulation mechanics, robust string parsing/tokenization, VFS mapping, and logic validation for the Learning Mode.
 
-##📌 Project Status
+## 📌 Project Status
 
 Current Version: v1.0 Stable
 
