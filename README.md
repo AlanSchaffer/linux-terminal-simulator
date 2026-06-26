@@ -13,13 +13,8 @@ Based on a Debian GNU/Linux environment, the simulator replicates system files, 
 
 *(Add your screenshots here to showcase the project)*
 
-* **Login Screen:** `[<img width="1328" height="669" alt="image" src="https://github.com/user-attachments/assets/807065be-385d-4a45-93cc-4f3b131d0693" />
-* **Free Terminal:** `[<img width="632" height="659" alt="image" src="https://github.com/user-attachments/assets/355a623a-0115-4458-9959-7ad2580eb7af" />
-]`
-* **Learning Mode:** `[<img width="1333" height="649" alt="image" src="https://github.com/user-attachments/assets/5aec4db5-ae0b-4a8e-ae44-8be912265a34" />
-]`
-* **Themes & Mobile:** `[<img width="190" height="431" alt="image" src="https://github.com/user-attachments/assets/e84c1a38-737d-4272-96d6-2cd98ff9b149" />
-]`
+* **Login Screen:** `<img width="1328" height="669" alt="image" src="https://github.com/user-attachments/assets/807065be-385d-4a45-93cc-4f3b131d0693" />
+
 
 ---
 
