@@ -33,7 +33,7 @@ Experience the environment online instantly:
   * Logical operators (`&&` and `||`)
   * Tab-autocomplete for files and directories
   * Command history via `ArrowUp` and `ArrowDown`
-* **📱 100% Mobile Responsive:** Custom CSS architectures prevent virtual keyboards from breaking the layout and stop native OS zoom issues, providing a seamless "native app" feel on iOS and Android.
+* **📱 90% Mobile Responsive:** Custom CSS architectures prevent virtual keyboards from breaking the layout and stop native OS zoom issues, providing a seamless "native app" feel on iOS and Android.
 * **🖌️ Dynamic Theme Engine:** Switch instantly between classic Default, Dracula, Nord, Gruvbox, Matrix, Catppuccin, and Cyberpunk themes.
 * **🌐 Localization:** Multi-language system supporting English and Portuguese on the fly.
 * **🐳 Virtual Docker Environment:** Sandboxed simulation for basic containerized workflows (pulling images, running containers) without requiring Docker on the host.
