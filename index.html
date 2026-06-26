@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="terminal.css">
+    <title>_403</title>
+</head>
+<body>
+
+   <div id="menu-container">
+        <div id="hamburger-btn">
+            <span class="hamburger-icon">☰</span>
+        </div>
+
+        <div id="main-menu">
+            <div class="menu-item" id="menu-theme-toggle">
+                <span class="menu-icon">⚙</span> Themes <span class="arrow">▶</span>
+            </div>
+            <div id="theme-submenu"> 
+                <button>Default</button>
+                <button>Dracula</button>
+                <button>Gruvbox</button>
+                <button>Matrix</button>
+                <button>Nord</button>
+                <button>Catppuccin</button>
+                <button>Cyberpunk</button>
+            </div>
+
+            <div class="menu-item" id="menu-lang-toggle">
+                <span class="menu-icon">🌐</span> <span id="lang-label">Lang: EN</span>
+            </div>
+
+            <div class="menu-item" id="menu-learning-btn">
+                <span class="menu-icon">📖</span> <span class="learning-label">Learn</span>
+            </div>
+
+            <div class="menu-separator"></div>
+        </div>
+    </div>
+    <div id="login-screen">
+        <pre class="login-art">    _  _    ___   _____
+   | || |  / _ \ |___ /
+   | || |_| | | |  |_ \
+   |__   _| |_| | ___) |
+_____ |_|  \___/ |____/</pre>
+        <p class="login-info">_403 Terminal</p>
+        <p class="login-info">Kernel 6.1.0-18-amd64 on an x86_64</p>
+        <br>
+        <p class="version">Version: v1.0 Stable </p>
+        <div class="login-line">
+            <span class="login-label">login: </span>
+            <input type="text" id="login-input" autofocus autocomplete="off" spellcheck="false" autocapitalize="none" autocorrect="off" aria-label="login">
+        </div>
+        <div class="login-line" id="password-line" style="display: none; margin-top: 8px;">
+            <span class="login-label">password: </span>
+            <input type="password" id="password-input" autocomplete="off" spellcheck="false" autocapitalize="none" autocorrect="off" aria-label="password">
+        </div>
+    </div>
+
+    <div id="terminal-screen">
+        <div id="mission-panel" style="display: none;"></div>
+        
+        <div id="editor-overlay" class="hidden">
+            <div class="editor-header">
+                <span id="editor-filename">nano</span>
+                <span>(Ctrl+X to save & exit)</span>
+            </div>
+            <textarea id="editor-textarea" spellcheck="false"></textarea>
+        </div>
+        
+        <div id="terminal"></div>
+    </div>
+
+    <!-- Biblioteca para funcionar o python -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+    <!-- Arquivos JS -->
+<script src="learning.js"></script>
+<script src="terminal.js"></script>
+<script src="vfs.js"></script>
+<script src="command.js"></script>
+</body>
+</html>

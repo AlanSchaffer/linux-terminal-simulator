@@ -1,0 +1,605 @@
+/* ── THEME VARIABLE (default: Dark/Debian) ───────────────── */
+:root {
+    --bg-color: #0d0d0d;
+    --text-color: #f0f0f0;
+    --art-color: #cc0000;
+    --accent-color: #50fa7b;
+    --info-color: #8be9fd;
+    --warn-color: #ffb86c;
+    --muted-color: #aaaaaa;
+}
+
+/* Theme Dracula */
+.theme-dracula {
+    --bg-color: #282a36;
+    --text-color: #f8f8f2;
+    --art-color: #ff79c6;
+    --accent-color: #50fa7b;
+    --info-color: #8be9fd;
+    --warn-color: #ffb86c;
+    --muted-color: #6272a4;
+}
+
+/* Theme Gruvbox */
+.theme-gruvbox {
+    --bg-color: #282828;
+    --text-color: #ebdbb2;
+    --art-color: #cc241d;
+    --accent-color: #b8bb26;
+    --info-color: #83a598;
+    --warn-color: #fabd2f;
+    --muted-color: #928374;
+}
+
+.theme-nord {
+    --bg-color: #2e3440;
+    --text-color: #d8dee9;
+    --art-color: #88c0d0;
+    --accent-color: #a3be8c;
+    --info-color: #81a1c1;
+    --warn-color: #ebcb8b;
+    --muted-color: #4c566a;
+}
+
+.theme-catppuccin {
+    --bg-color: #1e1e2e;
+    --text-color: #cdd6f4;
+    --art-color: #f38ba8;
+    --accent-color: #a6e3a1;
+    --info-color: #89b4fa;
+    --warn-color: #f9e2af;
+    --muted-color: #585b70;
+}
+
+.theme-cyberpunk {
+    --bg-color: #120b29;
+    --text-color: #fdfdfd;
+    --art-color: #ff007f;
+    --accent-color: #00ffcc;
+    --info-color: #00e1ff;
+    --warn-color: #ffb800;
+    --muted-color: #5c457b;
+}
+/* Theme Matrix (Classic Green) */
+.theme-matrix {
+    --bg-color: #000000;
+    --text-color: #00ff00;
+    --art-color: #00ff00;
+    --accent-color: #00ff00;
+    --info-color: #008000;
+    --warn-color: #00ff00;
+    --muted-color: #005f00;
+}
+
+/* ── CUSTOMIZAÇÕES EXCLUSIVAS DO TEMA MATRIX ───────────────── */
+
+/* Altera o texto digitado no terminal (linhas ativas e comandos antigos já enviados) */
+.theme-matrix .line input {
+    color: #ffffff !important;
+    caret-color: #00ff00 !important;
+}
+
+/* Altera o texto digitado no campo de login (caso o tema Matrix seja selecionado logo na entrada) */
+.theme-matrix #login-input {
+    color: #ffffff !important;
+    caret-color: #00ff00 !important;
+}
+
+
+/* ── ALL SETTINGS ──────────────────────────────────── */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    height: 100dvh;
+    overflow: hidden;
+}
+
+/* ── HAMBURGER MENU (ESTILO TERMINAL PREMIUM) ──────────────────────────────────── */
+#menu-container {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    z-index: 1000;
+}
+
+#hamburger-btn {
+    cursor: pointer;
+    padding: 6px 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--muted-color);
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#hamburger-btn:hover, #hamburger-btn.active {
+    border-color: var(--art-color);
+    background-color: rgba(204, 0, 0, 0.08);
+    box-shadow: 0 0 12px rgba(204, 0, 0, 0.35);
+    transform: translateY(-1px);
+}
+
+.hamburger-icon {
+    font-size: 22px;
+    color: var(--muted-color);
+    line-height: 1;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+#hamburger-btn:hover .hamburger-icon, #hamburger-btn.active .hamburger-icon {
+    color: var(--art-color);
+    text-shadow: 0 0 8px var(--art-color);
+}
+
+/* Painel do Menu (Visual de Sub-janela de Sistema / Prompt Completo) */
+#main-menu {
+    position: absolute;
+    top: 42px;
+    right: 0;
+    background-color: var(--bg-color);
+    border: 1px solid var(--muted-color);
+    border-top: 3px solid var(--art-color); /* Barra superior destacada imitando janela */
+    border-radius: 4px;
+    min-width: 170px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.85), 0 0 15px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    padding: 6px 0;
+    
+    /* Animação suave de entrada */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px) scale(0.98);
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                visibility 0.2s;
+}
+
+#main-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+    border-color: var(--art-color);
+}
+
+/* Itens de Seleção Internos */
+.menu-item {
+    padding: 10px 16px;
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.15s ease;
+    border-left: 3px solid transparent;
+}
+
+.menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+    color: var(--accent-color);
+    border-left-color: var(--accent-color); /* Traço lateral com a cor de destaque do tema */
+    padding-left: 19px; /* Pequeno efeito slide elegante */
+}
+
+.menu-icon {
+    font-size: 14px;
+    min-width: 18px;
+    text-align: center;
+}
+
+.arrow {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--muted-color);
+    transition: transform 0.2s ease;
+}
+
+.menu-item:hover .arrow {
+    color: var(--accent-color);
+}
+
+.menu-separator {
+    height: 1px;
+    background-color: var(--muted-color);
+    margin: 6px 0;
+    opacity: 0.15;
+}
+
+/* Submenu de Temas Expandido */
+#theme-submenu {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#theme-submenu.show {
+    max-height: 350px;
+    margin-bottom: 4px;
+}
+
+#theme-submenu button {
+    display: block;
+    width: 100%;
+    padding: 8px 16px 8px 36px;
+    border: none;
+    background: transparent;
+    color: var(--muted-color);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+#theme-submenu button:hover {
+    color: var(--text-color);
+    background-color: rgba(255, 255, 255, 0.05);
+    padding-left: 40px;
+}
+
+#theme-submenu button.active {
+    color: var(--accent-color);
+    font-weight: bold;
+    text-shadow: 0 0 4px rgba(80, 250, 123, 0.4);
+}
+
+/* ── LOGIN SCREEN ──────────────────────────────────────────── */
+#login-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 48px;
+    user-select: none;
+    position: relative;
+}
+
+.login-art {
+    color: var(--art-color);
+    font-size: 12px;
+    white-space: pre;
+    line-height: 1.3;
+    margin-bottom: 20px;
+    text-shadow: 0 0 8px rgba(204,0,0,0.4);
+    text-align: center;
+}
+
+.login-info {
+    color: var(--muted-color);
+    margin-bottom: 3px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.version {
+    color: var(--muted-color);
+    margin-bottom: 3px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.login-line {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+    justify-content: center;
+}
+
+.login-label {
+    color: var(--text-color);
+    white-space: nowrap;
+    width: 85px;          /* Define uma largura fixa para alinhar os textos */
+    text-align: right;    /* Alinha os dois pontos (:) perfeitamente à direita */
+    margin-right: 8px;    /* Espaço entre os dois pontos e o texto digitado */
+}
+
+/* Agrupamos os dois inputs para terem exatamente o mesmo estilo hacker */
+#login-input, #password-input {
+    background: transparent;
+    border: none;
+    color: var(--accent-color);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    outline: none;
+    caret-color: var(--accent-color);
+    width: 220px;
+}
+
+/* ── TERMINAL SCREEN ───────────────────────────────────────── */
+#terminal-screen {
+    display: none;
+    flex-direction: column;
+    height: 100vh;
+    /* Antes era: padding: 12px 16px; */
+    padding: 55px 16px 12px 16px; /* Adiciona 55px de espaço no topo */
+    overflow-y: auto;
+}
+
+#terminal {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+#terminal::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* ── PROMPT LINE ───────────────────────────────────────────── */
+.line {
+    display: flex;
+    align-items: center;
+    margin: 2px 0;
+    flex-wrap: nowrap;
+}
+
+.prompt {
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-right: 4px;
+}
+
+.p-user   { color: var(--accent-color); }
+.p-at     { color: var(--text-color); }
+.p-host   { color: var(--info-color); }
+.p-path   { color: var(--warn-color); }
+.p-dollar { color: var(--text-color); }
+
+.line input {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    outline: none;
+    flex: 1;
+    min-width: 0;
+    caret-color: var(--text-color);
+}
+
+/* ── OUTPUT ────────────────────────────────────────────────── */
+.output {
+    color: var(--text-color);
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.5;
+    margin: 1px 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+}
+
+.output.err  { color: var(--art-color); }
+.output.ok   { color: var(--accent-color); }
+.output.info { color: var(--info-color); }
+.output.warn { color: var(--warn-color); }
+
+.welcome {
+    color: var(--accent-color);
+    white-space: pre;
+    margin-bottom: 6px;
+}
+
+
+
+/* ── ESTILO DO LEARNING MODE ATIVADO ── */
+#learning-btn.active .learning-label {
+    color: var(--accent-color);
+    font-weight: bold;
+}
+
+#learning-btn.active .learning-icon {
+    color: var(--accent-color);
+    text-shadow: 0 0 8px var(--accent-color);
+}
+
+.learning-label {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    color: var(--muted-color);
+    transition: color 0.2s;
+}
+
+.learning-icon {
+    font-size: 18px;
+    color: var(--muted-color);
+    transition: color 0.2s, transform 0.2s;
+}
+
+/* hover effect to turn on the button */
+#learning-btn:hover .learning-label {
+    color: var(--text-color);
+}
+
+#learning-btn:hover .learning-icon {
+    color: var(--text-color);
+    transform: scale(1.1);
+}
+
+#terminal::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+#terminal::-webkit-scrollbar-thumb {
+    background: var(--muted-color);
+    border-radius: 3px;
+}
+
+/* Editor de texto  */
+#editor-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: var(--bg-color);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+#editor-overlay.hidden { display: none; }
+
+.editor-header {
+    background-color: var(--muted-color);
+    color: var(--bg-color);
+    padding: 5px 10px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+
+#editor-textarea {
+    flex: 1;
+    background-color: transparent;
+    color: var(--text-color);
+    border: none;
+    resize: none;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    padding: 10px;
+    outline: none;
+}
+
+/* ── MISSION PANEL (LEARNING MODE) ── */
+#mission-panel {
+    flex-shrink: 0; /* Impede que o terminal esmague o painel quando rolar */
+    border: 1px solid var(--info-color);
+    border-left: 4px solid var(--info-color);
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#mission-hints {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   📱 MOBILE RESPONSIVENESS (SMARTPHONES & TABLETS)
+   ═══════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+   /* ── 1. LAYOUT GERAL E MENU ── */
+    #terminal-screen {
+        padding: 45px 8px 8px 8px; 
+    }
+
+    #main-menu {
+        /* Garante que o menu não esmague no celular e fique sobre o terminal */
+        width: 220px;
+        max-width: 85vw;
+        z-index: 9999;
+    }
+
+    #theme-submenu {
+        /* Em vez de abrir para o lado e sair da tela, abre para baixo em coluna */
+        position: static; 
+        display: none; /* Mantém a lógica do seu JS de mostrar/esconder */
+        flex-direction: column;
+        padding-left: 15px;
+        box-shadow: none;
+        border: none;
+        background: transparent;
+    }
+
+    /* Quando o submenu recebe a classe para aparecer (caso seu JS use classe ou display flex) */
+    #theme-submenu.show, #main-menu:hover #theme-submenu {
+        display: flex;
+    }
+
+    /* ── 2. LOGIN SCREEN ── */
+    #login-screen {
+        padding: 20px;
+    }
+
+    .login-art {
+        /* Impede que a Arte ASCII quebre e gere rolagem horizontal */
+        font-size: 9px; 
+        margin-bottom: 15px;
+    }
+
+    .login-label {
+        width: 70px;
+        font-size: 14px;
+    }
+
+    /* ── 3. LEARNING MODE (MISSÕES) ── */
+    #mission-panel {
+        padding: 10px;
+        margin-bottom: 10px;
+        /* Limita o painel a 35% da tela. Assim, quando o teclado subir,
+           o painel rola internamente e não esmaga o terminal! */
+        max-height: 35vh; 
+        overflow-y: auto;
+        font-size: 13px;
+    }
+
+    /* Sobrescreve o estilo inline do JS para a caixa de status da missão */
+    #mission-panel div[style*="max-height: 110px"] {
+        max-height: 80px !important;
+        margin-top: 6px !important;
+    }
+
+    /* ── 4. PREVENÇÃO DE ZOOM E PROMPT LONGO ── */
+    .line {
+        /* Força o input a ficar na mesma linha do prompt, custe o que custar */
+        flex-wrap: nowrap !important; 
+    }
+
+    .prompt {
+        /* Se a pasta for muito longa, ela quebra em vez de empurrar o texto */
+        white-space: normal;
+        word-break: break-all;
+        margin-bottom: 2px;
+    }
+
+    /*  O SEGREDO DO IOS: Fontes de input PRECISAM ter 16px no mobile */
+    .line input, #login-input, #password-input {
+        font-size: 16px !important; 
+        /* Reduzimos o min-width para não forçar a quebra, mas garantimos que ele ocupe o espaço */
+        min-width: 20px; 
+        width: 100%;
+    }
+
+    .line input {
+        flex: 1; /* Ocupa o espaço restante sem quebrar para baixo */
+    }
+
+    /* ── 5. EDITOR NANO / VIM ── */
+    #editor-overlay {
+        padding: 5px;
+    }
+
+    .editor-header {
+        flex-direction: column;
+        text-align: center;
+        font-size: 11px;
+        gap: 4px;
+        padding: 8px 5px;
+    }
+}
