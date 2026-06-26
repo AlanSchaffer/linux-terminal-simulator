@@ -87,7 +87,3 @@ A safe and isolated environment for experimenting with containerized workflows d
 - [ ] **Image Simulation:** Pull, build, list, and manage virtual container images.
 - [ ] **Sandboxed Development Environment:** Practice container-based development without requiring Docker installation on the host system.
 
-- [ ] **Virtual Docker System:** Simulated Docker environment supporting common container management commands and workflows.
-- [ ] **Container Lifecycle Management:** Create, start, stop, inspect, and remove virtual containers.
-- [ ] **Image Simulation:** Pull, build, list, and manage virtual container images.
-- [ ] **Sandboxed Development Environment:** Practice container-based development without requiring Docker installation on the host system.
