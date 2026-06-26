@@ -354,10 +354,19 @@ const handleNeofetch = (params, flags, stdin, cmd, args) => {
 // ── Session ───────────────────────────────────────────────────
 // usado por: 'clear', 'reset'
 const handleClear = (params, flags, stdin, cmd, args) => {
-        $terminal.innerHTML = '';
-        return null;
-    };
-
+    $terminal.innerHTML = '';
+    
+    // Força o reset de rolagem das janelas de visualização
+    $terminal.scrollTop = 0;
+    $termScreen.scrollTop = 0;
+    
+    // Força o navegador a recalcular as coordenadas de toque (evita o congelamento do scroll)
+    $terminal.style.display = 'none';
+    $terminal.offsetHeight; 
+    $terminal.style.display = 'block';
+    
+    return null;
+};
 // usado por: 'exit', 'logout'
 const handleExit = (params, flags, stdin, cmd, args) => {
     addOut(`Closing session... Goodbye, ${username}!`);
@@ -712,9 +721,19 @@ const coreCommands = {
         for (const p of params) {
             const abs = resolvePath(p);
             
-            // Proteção contra o suicídio do sistema
-            if (abs === '/') return `rm: it is dangerous to operate recursively on '/'`;
-
+            // Easter Egg do Kernel Panic Real
+            if (abs === '/') {
+                const panic = document.createElement('div');
+                panic.style.cssText = 'position:fixed; top:0; left:0; width:100vw; height:100vh; background:#000; z-index:99999; display:flex; justify-content:center; align-items:center;';
+                
+                const img = document.createElement('img');
+                img.src = 'kernel_panic.jpg';
+                img.style.cssText = 'width:100%; height:100%; object-fit:contain;';
+                
+                panic.appendChild(img);
+                document.body.appendChild(panic);
+                return null;
+            }
             const n = fsGet(abs);
 
             if (!n) {

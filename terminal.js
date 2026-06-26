@@ -107,6 +107,13 @@ window.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation(); 
             setTheme(window.AVAILABLE_THEMES[i]);
+
+            // Recolhe APENAS o submenu de temas
+            if (themeSubmenu) themeSubmenu.classList.remove('show');
+            
+            // Volta a setinha para a posição original
+            const arrow = themeToggle.querySelector('.arrow');
+            if (arrow) arrow.innerText = '▶';
         });
     });
 
@@ -167,6 +174,14 @@ window.addEventListener('DOMContentLoaded', () => {
             
             // Recarrega a aplicação limpando a tela e voltando ao login tty
             window.location.reload();
+        });
+    }
+
+    // ── LÓGICA DO BOTÃO ABOUT ME ──
+    const btnAbout = document.getElementById('menu-about-btn');
+    if (btnAbout) {
+        btnAbout.addEventListener('click', () => {
+            window.open('https://github.com/AlanSchaffer', '_blank');
         });
     }
 

@@ -528,6 +528,11 @@ html, body {
    ═══════════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
    /* ── 1. LAYOUT GERAL E MENU ── */
+
+   #terminal {
+        padding-top: 15px !important; 
+    }
+
     #terminal-screen {
         padding: 45px 8px 8px 8px; 
     }
