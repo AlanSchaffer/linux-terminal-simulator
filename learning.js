@@ -1103,6 +1103,19 @@ window.triggerHint = function() {
     
     currentHintIndex++;
     hintsContainer.appendChild(hintDiv);
+
+    // ── NOVO: Faz o painel rolar suavemente para baixo no mobile ──
+    const missionPanel = document.getElementById('mission-panel');
+    if (missionPanel) {
+        // Rola o painel interno de missões
+        missionPanel.scrollTo({
+            top: missionPanel.scrollHeight,
+            behavior: 'smooth'
+        });
+    }
+    
+    // Garante que o terminal principal também acompanhe
+    if (typeof scrollBottom === 'function') scrollBottom();
 };
 
 // ── Core Engine ──────────────────────────────────────────────────────
@@ -1307,6 +1320,11 @@ function showCompletionScreen() {
         overlay.remove();
         const missionPanel = document.getElementById('mission-panel');
         if (missionPanel) { missionPanel.style.display = 'none'; missionPanel.innerHTML = ''; }
+
+        // Esconde o botão de idiomas
+        const langBtn = document.getElementById('menu-lang-toggle');
+        if (langBtn) langBtn.classList.remove('show-lang');
+
         const terminal = document.getElementById('terminal');
         if (terminal) terminal.innerHTML = '';
         if (typeof addOut === 'function') addOut(lang === 'en' ? '\n[SYSTEM] Welcome back to the Free Terminal! Type "help" to explore.' : '\n[SISTEMA] Bem-vindo de volta ao Terminal Livre! Digite "help" para explorar.', 'info');

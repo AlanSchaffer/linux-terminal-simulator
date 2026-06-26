@@ -134,10 +134,20 @@ window.addEventListener('DOMContentLoaded', () => {
             if (typeof startLearningMode === 'function') {
                 if (isLearning) {
                     addOut(stopLearningMode(), 'warn');
+                    
+                    // ── NOVO: Esconde o botão se o usuário desativar pelo menu
+                    const langBtn = document.getElementById('menu-lang-toggle');
+                    if (langBtn) langBtn.classList.remove('show-lang');
+
                 } else {
                     $terminal.innerHTML = ''; 
                     cwd = `/home/${username}`; 
                     startLearningMode();
+                    
+                    // ── NOVO: Mostra o botão de idiomas quando inicia o Learning Mode
+                    const langBtn = document.getElementById('menu-lang-toggle');
+                    if (langBtn) langBtn.classList.add('show-lang');
+                    
                     newLine(); 
                 }
                 scrollBottom();
