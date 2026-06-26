@@ -1,89 +1,95 @@
-# 🐧 Linux Terminal Simulator
+# 🐧 Web Linux Terminal Simulator
 
-A lightweight, educational, and interactive Linux terminal simulator built from scratch using vanilla web technologies.
+A lightweight, educational, and highly interactive Linux terminal simulator built from scratch using vanilla web technologies. 
 
----
+💡 **The Project Objective**
+The primary mission of this project is to introduce people to the Linux operating system in an accessible, zero-risk environment. Many users feel intimidated by the command-line interface or fear breaking their system. This simulator breaks down that barrier, allowing students, tech enthusiasts, and curious users to explore commands, navigate file trees, and learn terminal core concepts safely right inside their web browser.
 
-## 💡 The Project Idea
-The primary mission of this project is to **introduce people to the Linux operating system** in an accessible, zero-risk environment. Many users feel intimidated by the command-line interface or fear breaking their system. This simulator breaks down that barrier, allowing students, tech enthusiasts, and curious users to explore commands, navigate file trees, and learn terminal core concepts safely right inside their web browser.
-
-Based on a **Debian GNU/Linux** environment, the simulator replicates system files, default configurations, and shell behaviors to deliver a realistic experience.
+Based on a Debian GNU/Linux environment, the simulator replicates system files, default configurations, shell behaviors, and logic operators to deliver a realistic experience without the need for virtual machines or complex setups.
 
 ---
 
-## 📸 Preview & First Look
+## 📸 Screenshots
 
-To access the simulator, users are greeted by a retro-style ASCII art login screen mimicking a real Debian tty session:
+*(Add your screenshots here to showcase the project)*
 
-<p align="center">
-  <img src="login_preview.png" alt="Linux Terminal Simulator Login Screen" width="750">
-</p>
-
+* **Login Screen:** `[<img width="1328" height="669" alt="image" src="https://github.com/user-attachments/assets/807065be-385d-4a45-93cc-4f3b131d0693" />
+* **Free Terminal:** `[<img width="632" height="659" alt="image" src="https://github.com/user-attachments/assets/355a623a-0115-4458-9959-7ad2580eb7af" />
+]`
+* **Learning Mode:** `[<img width="1333" height="649" alt="image" src="https://github.com/user-attachments/assets/5aec4db5-ae0b-4a8e-ae44-8be912265a34" />
+]`
+* **Themes & Mobile:** `[<img width="190" height="431" alt="image" src="https://github.com/user-attachments/assets/e84c1a38-737d-4272-96d6-2cd98ff9b149" />
+]`
 
 ---
 
 ## 🚀 Live Demo
+
 Experience the environment online instantly:
-👉 **[Open the Linux Terminal Simulator](https://alanschaffer.github.io/linux-terminal-simulator/)**
+👉 **[Open the Linux Terminal Simulator](LINK_TO_YOUR_LIVE_DEMO_HERE)**
 
 ---
 
-## 🎨 Features & System Architecture
+## 🎨 Core Features
 
-### 📁 Virtual File System (VFS)
-*   **Realistic Directory Tree:** Includes standard Unix/Linux directories such as `/home`, `/etc`, `/var/log`, `/bin`, `/usr`, `/tmp`, and `/root`.
-*   **Dynamic Data Creation:** Users can dynamically interact with the file system using navigation commands.
-
-### ⚙️ Command Simulation Engine
-The core logic parses commands along with flags and basic operators. Current simulated categories include:
-*   **Navigation & Discovery:** `cd`, `ls` (supports flags like `-l`, `-a`, `-lh`), `pwd`, `tree`, and `whereis`.
-*   **File Management:** `touch`, `mkdir`, `cat`, `stat`, and `file`.
-*   **System Diagnostics:** `neofetch`, `uname` (supports `-a`, `-r`, `-m`), `uptime`, `df`, `du`, and `free`.
-*   **Text Utilities:** Basic output reading and line manipulation utilities.
-*   **Session Control:** `clear` / `cls`, `exit`, `logout`, and simulated system states for `reboot` and `shutdown`.
-
-### 🛡️ Interactive Security & Restricted Actions
-*   **Sudo Simulation:** Simulates privilege escalation natively.
-*   **Dynamic Easter Eggs:** Includes specialized safety boundaries. For educational humor, executing restricted destructive root commands triggers a full-screen customized image rendering a system crash event.
-
-### ⌨️ Advanced Terminal UX
-*   **Command History:** Navigate previous commands seamlessly using the `ArrowUp` and `ArrowDown` keys.
-*   **Tab Autocomplete:** Mimics standard shell tab completion for directories and files to enhance workflow speed.
-*   **Signal Handling:** Supports `Ctrl + C` to abort/cancel lines and `Ctrl + L` to clear the viewport cleanly.
+* **📚 Interactive Learning Mode:** A built-in curriculum with step-by-step missions. It teaches everything from basic navigation (`pwd`, `ls`) to advanced file manipulation, permissions, and security. Features real-time command validation and hints.
+* **📁 Virtual File System (VFS):** A realistic directory tree featuring standard Unix/Linux paths (`/home`, `/etc`, `/var`, `/usr`). Changes, files created, and permissions are persisted locally in the browser.
+* **⚙️ Advanced Command Engine:** Supports complex shell mechanics including:
+  * Output redirection (`>` and `>>`)
+  * Pipelines (`|`) with quote-awareness
+  * Logical operators (`&&` and `||`)
+  * Tab-autocomplete for files and directories
+  * Command history via `ArrowUp` and `ArrowDown`
+* **📱 100% Mobile Responsive:** Custom CSS architectures prevent virtual keyboards from breaking the layout and stop native OS zoom issues, providing a seamless "native app" feel on iOS and Android.
+* **🖌️ Dynamic Theme Engine:** Switch instantly between classic Default, Dracula, Nord, Gruvbox, Matrix, Catppuccin, and Cyberpunk themes.
+* **🌐 Localization:** Multi-language system supporting English and Portuguese on the fly.
+* **🐳 Virtual Docker Environment:** Sandboxed simulation for basic containerized workflows (pulling images, running containers) without requiring Docker on the host.
+* **📝 Text Editors:** Built-in interactive overlays simulating `nano` and `vim` for file editing.
 
 ---
 
-## 🛠️ Built With
-*   **HTML5** – Application structure and canvas boundaries.
-*   **CSS3** – Retro monospace typography, custom layout components, and shadow glowing filters.
-*   **Vanilla JavaScript (ES6+)** – DOM manipulation mechanics, input parsing engines, and standard data structure VFS mapping.
+## ⌨️ Supported Commands
+
+The simulation engine parses commands, flags, and basic operators. Here are some of the key commands you can use:
+
+* **Navigation & Discovery:** `cd`, `ls` (supports `-l`, `-a`), `pwd`, `tree`, `find`, `whereis`
+* **File Management:** `touch`, `mkdir`, `rm`, `rmdir`, `mv`, `cp`, `cat`, `grep`, `chmod`, `cut`, `head`, `tail`
+* **System & Diagnostics:** `neofetch`, `uname`, `uptime`, `df`, `du`, `free`, `ps`, `top`
+* **Network Simulators:** `ping`, `curl`, `tcpdump`, `ifconfig`, `ssh-keygen`, `proxychains`
+* **Text Editors:** `nano`, `vim`
+* **Package Management:** `apt` (simulated package installations to unlock commands)
+* **Fun & Easter Eggs:** `cmatrix`, `cowsay`, `sl`, and custom system-crash triggers for restricted root commands.
+
+*(Note: Many commands support standard flags and fallback parameters to mirror real bash behavior).*
 
 ---
-## 🔧 Future Roadmap (Current Version: A_2.1)
-This simulator is under active development. The upcoming milestones include:
 
-- [X] **Advanced Theme Engine:** Implementation of a visual customization suite, introducing popular community themes like **Dracula**, Nord, Gruvbox, and Matrix.
-- [ ] **Interactive Utilities:** Simulating full-screen interactive binaries such as a light version of the `nano` or `vim` editors.
-- [ ] **Enhanced Shell Operators:** Expanding logic chain operators to support deep output redirections.
+## 🚀 How to Start (Local Setup)
 
-### 🌐 Internationalization & Localization
-A native localization engine to make the terminal accessible globally, changing system readmes, configurations, and commands on the fly.
+Since this project is built entirely with Vanilla Web Technologies (HTML, CSS, JS), there are no complex build steps, dependencies, or node modules required.
 
-- [ ] **Multi-language System:** Clean dropdown menu interface featuring **English (Default)**, **Português**, and **Español**.
-- [ ] **Localized Content:** Dynamically translates system outputs, helper documents (`readme.txt`), and learning modules based on the selected locale.
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/YOUR_USERNAME/linux-terminal-simulator.git](https://github.com/YOUR_USERNAME/linux-terminal-simulator.git)
 
-### 📚 Learning & Training
-A dedicated learning environment designed to help users master the Web Terminal through guided lessons, practical exercises, command references, and interactive challenges.
+2. **Navigate to the folder:**
+   ```bash
+   cd linux-terminal-simulator
 
-- [ ] **Terminal Learning Hub:** Step-by-step tutorials covering essential and advanced shell commands.
-- [ ] **Interactive Exercises:** Hands-on scenarios to practice navigation, file management, pipelines, permissions, and scripting.
-- [ ] **Command Reference Center:** Built-in documentation and examples for supported commands.
+    Run the project:
+    Simply open the index.html file in your preferred web browser.
+    (For the best experience, you can also serve it via VS Code Live Server or any basic HTTP server).
 
-### 🐳 Virtual Container Environment
-A safe and isolated environment for experimenting with containerized workflows directly within the simulator.
+##🛠️ Built With
 
-- [ ] **Virtual Docker System:** Simulated Docker environment supporting common container management commands and workflows.
-- [ ] **Container Lifecycle Management:** Create, start, stop, inspect, and remove virtual containers.
-- [ ] **Image Simulation:** Pull, build, list, and manage virtual container images.
-- [ ] **Sandboxed Development Environment:** Practice container-based development without requiring Docker installation on the host system.
+    HTML5 – Application structure and canvas boundaries.
 
+    CSS3 – Retro monospace typography, custom layout components, mobile media queries, and theming variables.
+
+    Vanilla JavaScript (ES6+) – DOM manipulation mechanics, robust string parsing/tokenization, VFS mapping, and logic validation for the Learning Mode.
+
+##📌 Project Status
+
+Current Version: v1.0 Stable
+
+This project has reached its feature-complete milestone. The core architecture, learning mode, and command engine are 90% stable. Future updates to this repository will be strictly dedicated to bug fixes, code maintenance, and stability improvements. No new major features are planned for this specific version.
