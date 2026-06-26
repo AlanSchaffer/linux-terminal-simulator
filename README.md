@@ -11,9 +11,7 @@ Based on a Debian GNU/Linux environment, the simulator replicates system files, 
 
 ## 📸 Screenshots
 
-*(Add your screenshots here to showcase the project)*
-
-* **Login Screen:** `<img width="1328" height="669" alt="image" src="https://github.com/user-attachments/assets/807065be-385d-4a45-93cc-4f3b131d0693" />
+* **Login Screen:** <img width="1328" height="669" alt="image" src="https://github.com/user-attachments/assets/807065be-385d-4a45-93cc-4f3b131d0693" />
 
 
 ---
