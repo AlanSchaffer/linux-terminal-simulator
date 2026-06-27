@@ -41,20 +41,21 @@ Experience the environment online instantly:
 
 ---
 
-## ⌨️ Supported Commands
+## ⌨️ Supported Commands (300+ Simulated)
 
-The simulation engine parses commands, flags, and basic operators. Here are some of the key commands you can use:
+The simulation engine parses commands, flags, and basic operators (including `&&`, `||`, `>`, `>>`, and `|`). Here are some of the key commands you can explore:
 
-* **Navigation & Discovery:** `cd`, `ls` (supports `-l`, `-a`), `pwd`, `tree`, `find`, `whereis`
-* **File Management:** `touch`, `mkdir`, `rm`, `rmdir`, `mv`, `cp`, `cat`, `grep`, `chmod`, `cut`, `head`, `tail`
-* **System & Diagnostics:** `neofetch`, `uname`, `uptime`, `df`, `du`, `free`, `ps`, `top`
-* **Network Simulators:** `ping`, `curl`, `tcpdump`, `ifconfig`, `ssh-keygen`, `proxychains`
-* **Text Editors:** `nano`, `vim`
-* **Package Management:** `apt` (simulated package installations to unlock commands)
-* **Fun & Easter Eggs:** `cmatrix`, `cowsay`, `sl`, and custom system-crash triggers for restricted root commands.
+* **Navigation & Discovery:** `cd`, `ls` (supports `-l`, `-a`, `-h`), `pwd`, `tree`, `find`, `whereis`, `locate`
+* **File & Text Management:** `touch`, `mkdir`, `rm` (supports `-rf`), `mv`, `cp`, `cat`, `grep` (supports `-i`), `chmod`, `head`, `tail`, `awk`, `sed`, `sort`, `base64`
+* **System & Diagnostics:** `neofetch`, `uname`, `uptime`, `df`, `du`, `free`, `ps`, `top`, `htop`, `whoami`, `sudo` (features a simulated root privilege escalation)
+* **Network & Security:** `ping`, `curl` (fetches real web data!), `nmap`, `tcpdump`, `ifconfig`, `ssh`, `proxychains`, `sqlmap`, `hydra`
+* **Development & Containers:** `python3` (Runs **real** Python code via WebAssembly with an interactive REPL), `node`, `git` (simulated workflow), `docker` (simulated container lifecycle)
+* **Live Web APIs:** `weather`, `github`, `crypto`, `joke`, `define`, `ipinfo` (Real-time data fetching directly in the terminal)
+* **Text Editors:** `nano`, `vim`, `vi`, `nvim` (Fully interactive overlays with mobile support)
+* **Package Management:** `apt` (Simulated package installations to unlock restricted tools)
+* **Fun & Easter Eggs:** `cmatrix`, `cowsay`, `sl`, `fortune`, `67`, and custom full-screen kernel panic triggers for dangerous root commands.
 
-*(Note: Many commands support standard flags and fallback parameters to mirror real bash behavior).*
-
+*(Note: Many commands support standard flags and fallback parameters to accurately mirror real bash behavior).*
 ---
 
 ## 🚀 How to Start (Local Setup)
