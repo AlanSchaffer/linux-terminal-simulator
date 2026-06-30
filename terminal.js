@@ -666,7 +666,17 @@ function newLine(isPassword = false) {
     });
 }
 
-function scrollBottom() { $terminal.scrollTop = $terminal.scrollHeight; }
+function scrollBottom() {
+    const anchor = document.getElementById('scroll-anchor');
+    if (anchor) {
+        // Usa smooth para o PC e instantâneo para o mobile para não "travar" visualmente
+        const isMobile = window.innerWidth <= 768;
+        anchor.scrollIntoView({ 
+            behavior: isMobile ? 'auto' : 'smooth', 
+            block: 'end' 
+        });
+    }
+}
 
 function addOut(text, cls = '') {
     const d = document.createElement('div');

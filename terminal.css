@@ -613,6 +613,11 @@ html, body {
 
    #terminal {
         padding-top: 15px !important; 
+        flex: 1 0 auto;
+    }
+
+    #scroll-anchor {
+        height: 1px; /* Âncora invisível */
     }
 
     #terminal-screen {
@@ -834,19 +839,21 @@ html, body {
 /* ── AJUSTES MOBILE (MÍDIA QUERY) ── */
 @media (max-width: 768px) {
     #mobile-toolbar {
-        display: flex; /* Aparece no celular */
+        display: flex;
+    }
+    
+    /* Removemos o padding forçado do terminal-screen para não criar espaçamento extra desnecessário */
+    #terminal-screen {
+        padding-top: 10px; 
+    }
+
+    /* Empurra o painel de missões para baixo no celular para não bater no menu */
+    #mission-panel {
+        margin-top: 80px !important; /* Ajuste este valor se quiser mais ou menos espaço */
     }
     
     #terminal {
-        padding-bottom: 60px !important; /* Espaço para a barra não cobrir as letras */
-    }
-    
-    #global-help-btn {
-        bottom: 75px; /* Sobe o botão de ajuda para não bater na barra de ferramentas */
-        right: 15px;
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
+        padding-bottom: 300px;
     }
 }
 
