@@ -326,6 +326,63 @@ body {
     width: 220px;
 }
 
+/* -- Parte das perguntas de login */
+/* ── SCREENS & BUTTONS (ONBOARDING) ── */
+.screen-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 48px;
+    user-select: none;
+    position: relative;
+}
+
+.welcome-question {
+    color: var(--text-color);
+    margin: 25px 0;
+    font-size: 14px; /* Alinhado com o padrão de texto do terminal */
+    font-family: 'Courier New', Courier, monospace; /* Força a fonte do site */
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase; /* Dá um estilo mais sistêmico/hacker */
+    letter-spacing: 1px;
+}
+
+.welcome-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.terminal-btn {
+    background: transparent;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    padding: 12px 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.terminal-btn:hover {
+    background: var(--accent-color);
+    color: var(--bg-color);
+    box-shadow: 0 0 15px rgba(80, 250, 123, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Botão destacado para iniciar o Learn */
+.active-btn {
+    background: rgba(80, 250, 123, 0.1);
+    box-shadow: 0 0 10px rgba(80, 250, 123, 0.2);
+}
+
 /* ── TERMINAL SCREEN ───────────────────────────────────────── */
 #terminal-screen {
     display: none;
@@ -509,6 +566,7 @@ body {
     display: flex; /* Classe que o JS vai usar para mostrar ele */
 }
 
+
 /* ── CORREÇÃO DE SCROLL (ANTI-FREEZE MOBILE) ── */
 html, body {
     overflow-x: hidden;
@@ -523,6 +581,30 @@ html, body {
     overflow-y: auto;
 }
 
+/* ── ESTILO BASE DOS BOTÕES DO EDITOR ── */
+#editor-mobile-controls {
+    display: none; /* Invisível no PC por padrão */
+    gap: 5px;
+    padding: 5px 0;
+}
+
+#editor-mobile-controls button {
+    flex: 1;
+    padding: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--muted-color);
+    color: var(--text-color);
+    border-radius: 4px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#editor-mobile-controls button:active {
+    background-color: var(--accent-color);
+    color: #000;
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    📱 MOBILE RESPONSIVENESS (SMARTPHONES & TABLETS)
    ═══════════════════════════════════════════════════════════════════ */
@@ -534,7 +616,7 @@ html, body {
     }
 
     #terminal-screen {
-        padding: 45px 8px 8px 8px; 
+        padding: 70px 10px 8px 10px; 
     }
 
     #main-menu {
@@ -631,3 +713,143 @@ html, body {
         padding: 8px 5px;
     }
 }
+
+/* ── TRANSIÇÕES SUAVES (FADE) ── */
+.screen-container {
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* ── BOTÃO DE IDIOMA TOP-LEFT (ONBOARDING) ── */
+#top-left-lang {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+    color: var(--muted-color);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 1000;
+    transition: color 0.2s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+#top-left-lang:hover {
+    color: var(--accent-color);
+    transform: scale(1.05);
+}
+
+/* ── BOTÃO GLOBAL DE AJUDA ── */
+#global-help-btn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid var(--info-color);
+    color: var(--info-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 99;
+    backdrop-filter: blur(5px);
+    transition: all 0.2s ease;
+}
+#global-help-btn:hover {
+    background: var(--info-color);
+    color: #000;
+    transform: scale(1.1);
+}
+
+/* ── BARRA DE TECLAS MOBILE ── */
+#mobile-toolbar {
+    display: none; /* Escondido por padrão no PC */
+    gap: 5px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.85);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+#mobile-toolbar button {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-color);
+    border: 1px solid var(--muted-color);
+    padding: 12px 0;
+    border-radius: 4px;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#mobile-toolbar button:active {
+    background: var(--accent-color);
+    color: #000;
+}
+
+
+/* ── LEARNING MODE BUTTONS & TRACKER ── */
+.hint-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+.hint-btn {
+    background: transparent;
+    border: 1px solid var(--warn-color);
+    color: var(--warn-color);
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    font-size: 13px;
+}
+.hint-btn:hover {
+    background: rgba(255, 184, 108, 0.1);
+}
+.hint-text {
+    color: var(--muted-color);
+    font-size: 11px;
+}
+/* A versão mobile fica escondida no PC */
+.tracker-mobile { display: none; }
+
+/* ── AJUSTES MOBILE (MÍDIA QUERY) ── */
+@media (max-width: 768px) {
+    #mobile-toolbar {
+        display: flex; /* Aparece no celular */
+    }
+    
+    #terminal {
+        padding-bottom: 60px !important; /* Espaço para a barra não cobrir as letras */
+    }
+    
+    #global-help-btn {
+        bottom: 75px; /* Sobe o botão de ajuda para não bater na barra de ferramentas */
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+}
+
+/* Oculta a lista inteira e mostra só a missão atual fixa no celular */
+    .tracker-desktop { display: none !important; }
+    .tracker-mobile { display: block !important; }

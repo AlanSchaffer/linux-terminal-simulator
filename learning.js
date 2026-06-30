@@ -1036,24 +1036,32 @@ function toggleButtonUI(active) {
 function printMission() {
     const lesson = missions[currentLesson];
     const missionPanel = document.getElementById('mission-panel');
-    const lang = window.currentLang || 'en'; // Puxa o idioma atual
+    const lang = window.currentLang || 'en';
     
     const currentStage = lesson.stage;
 
-    let trackerHTML = `<div style="margin-top:12px; padding: 8px; background: rgba(0,0,0,0.5); border-radius: 4px; max-height: 110px; overflow-y: auto; font-size: 12px; border: 1px solid var(--muted-color); font-family: monospace;">`;
-    trackerHTML += `<div style="color: var(--info-color); font-weight: bold; margin-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px;">📂 STAGE: ${currentStage.toUpperCase()}</div>`;
-
+    // ── VERSÃO PC: Lista completa com scroll ──
+    let trackerDesktop = `<div class="tracker-desktop" style="margin-top:8px; max-height: 90px; overflow-y: auto; font-size: 12px; font-family: monospace;">`;
     missions.forEach((m, idx) => {
         if (m.stage !== currentStage) return;
         let status = idx < currentLesson ? '<span style="color: var(--accent-color)">[ x ]</span>' : 
                      idx === currentLesson ? '<span style="color: var(--warn-color)">[ > ]</span>' : 
                      '<span style="color: var(--muted-color)">[   ]</span>';
         let color = idx === currentLesson ? 'color: var(--warn-color); font-weight: bold;' : 'color: var(--muted-color);';
-        
-        // Puxa o título no idioma correto
-        trackerHTML += `<div style="${color}; padding: 3px 0;">${status} ${m.title[lang]}</div>`;
+        trackerDesktop += `<div style="${color}; padding: 3px 0;">${status} ${m.title[lang]}</div>`;
     });
-    trackerHTML += `</div>`;
+    trackerDesktop += `</div>`;
+
+    // ── VERSÃO MOBILE: Apenas a missão atual fixa ──
+    let trackerMobile = `<div class="tracker-mobile" style="margin-top:8px; font-size: 12px; font-family: monospace; color: var(--warn-color); font-weight: bold;">
+        <span style="color: var(--warn-color)">[ > ]</span> ${lesson.title[lang]}
+    </div>`;
+
+    let trackerHTML = `<div style="margin-top:12px; padding: 8px; background: rgba(0,0,0,0.5); border-radius: 4px; border: 1px solid var(--muted-color);">
+        <div style="color: var(--info-color); font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px;">📂 STAGE: ${currentStage.toUpperCase()}</div>
+        ${trackerDesktop}
+        ${trackerMobile}
+    </div>`;
 
     let missionHTML = `
         <div style="color: var(--info-color); font-weight: bold;">
@@ -1066,9 +1074,9 @@ function printMission() {
             ${lesson.instruction[lang].replace(/\n/g, '<br>')}
         </div>
         ${trackerHTML}
-        <div style="margin-top: 10px;">
-            <button class="hint-btn" onclick="triggerHint()" style="background: transparent; border: 1px solid var(--warn-color); color: var(--warn-color); padding: 4px 10px; border-radius: 4px; cursor: pointer; transition: all 0.2s;">💡 ${lang === 'en' ? 'Get Hint' : 'Ver Dica'}</button>
-            <span style="color: var(--muted-color); font-size: 11px; margin-left: 8px;">(${lang === 'en' ? "or type 'hint'" : "ou digite 'hint'"})</span>
+        <div class="hint-container">
+            <button class="hint-btn" onclick="triggerHint()">💡 ${lang === 'en' ? 'Get Hint' : 'Ver Dica'}</button>
+            <span class="hint-text">(${lang === 'en' ? "or type 'hint'" : "ou digite 'hint'"})</span>
         </div>
         <div id="mission-hints"></div>
     `;
@@ -1167,10 +1175,15 @@ function startLearningMode(resumeLesson = -1) {
     currentHintIndex = 0;
     toggleButtonUI(true);
     
-    // TROCADO: Usa localStorage para persistir após fechar o navegador
     localStorage.setItem('_403_learning', '1');
     localStorage.setItem('_403_lesson', currentLesson.toString());
 
+    // ── GESTÃO DE BOTÕES (MOSTRA IDIOMA, ESCONDE AJUDA) ──
+    const topLeftLang = document.getElementById('top-left-lang');
+    if (topLeftLang) topLeftLang.style.display = 'flex';
+    
+    const globalHelpBtn = document.getElementById('global-help-btn');
+    if (globalHelpBtn) globalHelpBtn.style.display = 'none';
 
     if (resumeLesson === -1 || resumeLesson === 0) {
         addOut(`\n=== LEARNING MODE ACTIVATED ===\nInitializing curriculum...\n[INFO] Your default user is "user" and your password is "user". You might need it later!`, 'info');
@@ -1188,6 +1201,13 @@ function stopLearningMode() {
     toggleButtonUI(false);
     localStorage.removeItem('_403_learning');
     
+    // ── GESTÃO DE BOTÕES (ESCONDE IDIOMA, MOSTRA AJUDA) ──
+    const topLeftLang = document.getElementById('top-left-lang');
+    if (topLeftLang) topLeftLang.style.display = 'none';
+    
+    const globalHelpBtn = document.getElementById('global-help-btn');
+    if (globalHelpBtn) globalHelpBtn.style.display = 'flex';
+    
     const missionPanel = document.getElementById('mission-panel');
     if (missionPanel) {
         missionPanel.style.display = 'none';
@@ -1198,7 +1218,7 @@ function stopLearningMode() {
 
 function checkLesson(cmdInput, cmdOutput) {
     if (!isLearning) return null;
-    const raw = cmdInput.trim();
+    const raw = cmdInput.trim().replace(/\s+/g, ' ');
     if (raw === '') return null;
 
     if (raw.toLowerCase() === 'hint') {
@@ -1321,9 +1341,12 @@ function showCompletionScreen() {
         const missionPanel = document.getElementById('mission-panel');
         if (missionPanel) { missionPanel.style.display = 'none'; missionPanel.innerHTML = ''; }
 
-        // Esconde o botão de idiomas
-        const langBtn = document.getElementById('menu-lang-toggle');
-        if (langBtn) langBtn.classList.remove('show-lang');
+        // Restaura a exibição dos botões do terminal livre
+        const topLang = document.getElementById('top-left-lang');
+        if (topLang) topLang.style.display = 'none';
+        
+        const globalHelp = document.getElementById('global-help-btn');
+        if (globalHelp) globalHelp.style.display = 'flex';
 
         const terminal = document.getElementById('terminal');
         if (terminal) terminal.innerHTML = '';

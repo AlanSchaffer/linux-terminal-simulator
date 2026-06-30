@@ -48,36 +48,183 @@ function setTheme(themeName) {
     setTheme(savedTheme);
 })();
 
+// ── FUNÇÃO AUXILIAR DE TRADUÇÃO DO ONBOARDING ──
+function updateOnboardingLang() {
+    const lang = window.currentLang || 'en';
+    
+    // Elementos da Welcome Screen
+    const welcomeInfo = document.getElementById('welcome-info');
+    const welcomeQuestion = document.getElementById('welcome-question');
+    const btnExpert = document.getElementById('btn-expert');
+    const btnBeginner = document.getElementById('btn-beginner');
+    
+    // Elementos da Beginner Screen
+    const beginnerInfo = document.getElementById('beginner-info');
+    const beginnerDesc = document.getElementById('beginner-desc');
+    const btnStartLearn = document.getElementById('btn-start-learn');
+    const btnBackWelcome = document.getElementById('btn-back-welcome');
+    const btnBackFromLogin = document.getElementById('btn-back-from-login');
+
+    if (lang === 'en') {
+        if (welcomeInfo) welcomeInfo.innerText = "Connection successfully established.";
+        if (welcomeQuestion) welcomeQuestion.innerText = "Identify your access level:";
+        if (btnExpert) btnExpert.innerText = "I have Terminal experience";
+        if (btnBeginner) btnBeginner.innerText = "I have no experience";
+        
+        if (beginnerInfo) beginnerInfo.innerText = "Training and Simulation Mode.";
+        if (beginnerDesc) beginnerDesc.innerText = "You will learn basic Linux commands step-by-step in a safe environment.";
+        if (btnStartLearn) btnStartLearn.innerText = "Start Training (Learn)";
+        if (btnBackWelcome) btnBackWelcome.innerText = "Back";
+        if (btnBackFromLogin) btnBackFromLogin.innerText = "Back";
+    } else {
+        if (welcomeInfo) welcomeInfo.innerText = "Conexão estabelecida com sucesso.";
+        if (welcomeQuestion) welcomeQuestion.innerText = "Identifique o seu nível de acesso:";
+        if (btnExpert) btnExpert.innerText = "Tenho experiência com Terminal";
+        if (btnBeginner) btnBeginner.innerText = "Não tenho experiência";
+        
+        if (beginnerInfo) beginnerInfo.innerText = "Modo de Treinamento e Simulação.";
+        if (beginnerDesc) beginnerDesc.innerText = "Você aprenderá os comandos básicos de Linux em um ambiente seguro passo a passo.";
+        if (btnStartLearn) btnStartLearn.innerText = "Iniciar Treinamento (Learn)";
+        if (btnBackWelcome) btnBackWelcome.innerText = "Voltar";
+        if (btnBackFromLogin) btnBackFromLogin.innerText = "Voltar";
+    }
+}
+
+// ── FUNÇÃO DE TRANSIÇÃO SUAVE (FADE) ──
+function transitionTo(hideScreen, showScreen, callback) {
+    if (hideScreen) {
+        hideScreen.style.opacity = '0';
+    }
+    setTimeout(() => {
+        if (hideScreen) hideScreen.style.display = 'none';
+        if (showScreen) {
+            showScreen.style.opacity = '0';
+            showScreen.style.display = 'flex';
+            // Força o navegador a renderizar o display:flex antes de mudar a opacidade
+            void showScreen.offsetWidth; 
+            showScreen.style.opacity = '1';
+        }
+        if (callback) callback();
+    }, 300); // 300ms de transição, igual no CSS
+}
+
 window.addEventListener('DOMContentLoaded', () => {
     initLoginListener();
 
+    // ── REFERÊNCIAS DO MENU ──
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const mainMenu = document.getElementById('main-menu');
     const themeToggle = document.getElementById('menu-theme-toggle');
-    
-    // ── LÓGICA DO BOTÃO DE IDIOMA ──
     const langToggle = document.getElementById('menu-lang-toggle');
     const langLabel = document.getElementById('lang-label');
+    const themeSubmenu = document.getElementById('theme-submenu');
 
-    if (langToggle) {
-        // Define o texto inicial com base no que está salvo
-        langLabel.innerText = window.currentLang === 'en' ? 'Lang: EN' : 'Lang: PT';
-        
-        langToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            // Alterna entre 'en' e 'pt'
+    // ── REFERÊNCIAS DO ONBOARDING & TELAS ──
+    const $welcomeScreen = document.getElementById('welcome-screen');
+    const $beginnerScreen = document.getElementById('beginner-screen');
+    const topLeftLang = document.getElementById('top-left-lang');
+    const topLangLabel = document.getElementById('top-lang-label');
+    
+    const btnExpert = document.getElementById('btn-expert');
+    const btnBeginner = document.getElementById('btn-beginner');
+    const btnBackWelcome = document.getElementById('btn-back-welcome');
+    const btnStartLearn = document.getElementById('btn-start-learn');
+    const btnBackFromLogin = document.getElementById('btn-back-from-login');
+
+    // Sincroniza a tradução inicial
+    updateOnboardingLang();
+    
+    // Função para atualizar os labels de idioma em ambos os botões
+    const syncLangLabels = () => {
+        const txt = window.currentLang === 'en' ? 'EN' : 'PT';
+        if (langLabel) langLabel.innerText = 'Lang: ' + txt;
+        if (topLangLabel) topLangLabel.innerText = txt;
+    };
+    syncLangLabels();
+
+    // ── EVENTOS DOS BOTÕES DE ONBOARDING ──
+    if (btnExpert) {
+        btnExpert.addEventListener('click', () => {
+            transitionTo($welcomeScreen, $loginScreen, () => {
+                const loginInput = document.getElementById('login-input');
+                if (loginInput) loginInput.focus();
+            });
+        });
+    }
+
+    if (btnBeginner) {
+        btnBeginner.addEventListener('click', () => {
+            transitionTo($welcomeScreen, $beginnerScreen);
+        });
+    }
+
+    if (btnBackWelcome) {
+        btnBackWelcome.addEventListener('click', () => {
+            transitionTo($beginnerScreen, $welcomeScreen);
+        });
+    }
+
+    if (btnBackFromLogin) {
+        btnBackFromLogin.addEventListener('click', () => {
+            transitionTo($loginScreen, $welcomeScreen);
+        });
+    }
+
+    if (btnStartLearn) {
+        btnStartLearn.addEventListener('click', () => {
+            username = 'user';
+            userPassword = 'user';
+            sessionStorage.setItem('_403_active_user', username);
+            sessionStorage.setItem('_403_active_pass', userPassword);
+            initFS();
+
+            // Some com o botão de idioma top-left quando o terminal abrir
+            //if (topLeftLang) topLeftLang.style.display = 'none';
+
+            transitionTo($beginnerScreen, $termScreen, () => {
+                $termScreen.style.flexDirection = 'column';
+                if (typeof startLearningMode === 'function') {
+                    $terminal.innerHTML = ''; 
+                    cwd = `/home/${username}`; 
+                    startLearningMode();
+                    newLine();
+                    scrollBottom();
+                }
+            });
+        });
+    }
+
+    // ── LÓGICA DO BOTÃO DE IDIOMA TOP-LEFT ──
+    if (topLeftLang) {
+        topLeftLang.addEventListener('click', () => {
             window.currentLang = window.currentLang === 'en' ? 'pt' : 'en';
             localStorage.setItem('_403_lang', window.currentLang);
-            langLabel.innerText = window.currentLang === 'en' ? 'Lang: EN' : 'Lang: PT';
+            syncLangLabels();
+            updateOnboardingLang();
             
-            // Se o modo de aprendizado estiver aberto, atualiza o painel instantaneamente
+            // ── A LINHA QUE FALTAVA: Atualiza a missão instantaneamente ──
             if (typeof isLearning !== 'undefined' && isLearning && typeof printMission === 'function') {
                 printMission();
             }
         });
     }
-    const themeSubmenu = document.getElementById('theme-submenu');
 
+    // ── LÓGICA DO BOTÃO DE IDIOMA (MENU) ──
+    if (langToggle) {
+        langToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            window.currentLang = window.currentLang === 'en' ? 'pt' : 'en';
+            localStorage.setItem('_403_lang', window.currentLang);
+            syncLangLabels();
+            updateOnboardingLang();
+            
+            if (typeof isLearning !== 'undefined' && isLearning && typeof printMission === 'function') {
+                printMission();
+            }
+        });
+    }
+
+    // ── LÓGICA DE MENUS, TEMAS E EXIT (Mantida) ──
     if (hamburgerBtn) { 
         hamburgerBtn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -89,14 +236,14 @@ window.addEventListener('DOMContentLoaded', () => {
     if (themeToggle) {
         themeToggle.addEventListener('click', (e) => {
             e.stopPropagation();
-            themeSubmenu.classList.toggle('show');
+            if(themeSubmenu) themeSubmenu.classList.toggle('show');
             const arrow = themeToggle.querySelector('.arrow');
-            if(arrow) arrow.innerText = themeSubmenu.classList.contains('show') ? '▼' : '▶'; 
+            if(arrow && themeSubmenu) arrow.innerText = themeSubmenu.classList.contains('show') ? '▼' : '▶'; 
         });
     }
 
     window.addEventListener('click', (e) => {
-        if (mainMenu && !mainMenu.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+        if (mainMenu && !mainMenu.contains(e.target) && hamburgerBtn && !hamburgerBtn.contains(e.target)) {
             mainMenu.classList.remove('show');
             hamburgerBtn.classList.remove('active');
         }
@@ -107,11 +254,7 @@ window.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation(); 
             setTheme(window.AVAILABLE_THEMES[i]);
-
-            // Recolhe APENAS o submenu de temas
             if (themeSubmenu) themeSubmenu.classList.remove('show');
-            
-            // Volta a setinha para a posição original
             const arrow = themeToggle.querySelector('.arrow');
             if (arrow) arrow.innerText = '▶';
         });
@@ -121,7 +264,6 @@ window.addEventListener('DOMContentLoaded', () => {
     if (btnLearn) {
         btnLearn.addEventListener('click', () => {
             if ($termScreen.style.display === 'none' || $termScreen.style.display === '') {
-                // ── CORREÇÃO BUG 1: Apenas cria usuário se estiver na tela de login e sem conta!
                 if (!sessionStorage.getItem('_403_active_user')) {
                     username = 'user';
                     userPassword = 'user';
@@ -133,28 +275,20 @@ window.addEventListener('DOMContentLoaded', () => {
                     userPassword = sessionStorage.getItem('_403_active_pass') || 'user';
                 }
 
-                $loginScreen.style.display = 'none';
-                $termScreen.style.display  = 'flex';
-                $termScreen.style.flexDirection = 'column';
+                //if (topLeftLang) topLeftLang.style.display = 'none';
+                
+                transitionTo($welcomeScreen || $beginnerScreen || $loginScreen, $termScreen, () => {
+                    $termScreen.style.flexDirection = 'column';
+                });
             }
 
             if (typeof startLearningMode === 'function') {
                 if (isLearning) {
                     addOut(stopLearningMode(), 'warn');
-                    
-                    // ── NOVO: Esconde o botão se o usuário desativar pelo menu
-                    const langBtn = document.getElementById('menu-lang-toggle');
-                    if (langBtn) langBtn.classList.remove('show-lang');
-
                 } else {
                     $terminal.innerHTML = ''; 
                     cwd = `/home/${username}`; 
                     startLearningMode();
-                    
-                    // ── NOVO: Mostra o botão de idiomas quando inicia o Learning Mode
-                    const langBtn = document.getElementById('menu-lang-toggle');
-                    if (langBtn) langBtn.classList.add('show-lang');
-                    
                     newLine(); 
                 }
                 scrollBottom();
@@ -164,20 +298,15 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ── LÓGICA DO BOTÃO EXIT (AGORA FORA DO BTN LEARN) ──
     const btnExit = document.getElementById('menu-exit-btn');
     if (btnExit) {
         btnExit.addEventListener('click', () => {
-            // Remove o usuário da sessão ativa para simular o logout
             sessionStorage.removeItem('_403_active_user');
             sessionStorage.removeItem('_403_active_pass');
-            
-            // Recarrega a aplicação limpando a tela e voltando ao login tty
             window.location.reload();
         });
     }
 
-    // ── LÓGICA DO BOTÃO ABOUT ME ──
     const btnAbout = document.getElementById('menu-about-btn');
     if (btnAbout) {
         btnAbout.addEventListener('click', () => {
@@ -185,31 +314,123 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ── AUTO-LOGIN & RESTAURAR SESSÃO ──
+    // ── LÓGICA DO BOTÃO DE AJUDA GLOBAL E BARRA MOBILE ──
+    // Movemos o getActiveInput para cima para o botão de ajuda também poder usá-lo
+    const getActiveInput = () => $terminal.querySelector('.line:last-child input');
+
+    const globalHelpBtn = document.getElementById('global-help-btn');
+    if (globalHelpBtn) {
+        globalHelpBtn.addEventListener('click', async () => {
+            const input = getActiveInput();
+            if (input && !input.disabled) {
+                // Preenche visualmente a linha atual com 'help'
+                input.value = 'help';
+                input.disabled = true; // Trava a linha igual ao apertar Enter
+                
+                // Roda o comando no motor do terminal
+                await exec('help');
+                
+                // Pula para a próxima linha (se não estiver em um editor de texto)
+                if (!$termScreen.dataset.exiting && !$termScreen.dataset.editing) {
+                    newLine();
+                }
+                scrollBottom();
+            }
+        });
+    }
+
+    // Funcionalidades da Toolbar Mobile
+    const btnMTab = document.getElementById('btn-m-tab');
+    const btnMUp = document.getElementById('btn-m-up');
+    const btnMDown = document.getElementById('btn-m-down');
+    const btnMCtrlC = document.getElementById('btn-m-ctrlc');
+
+    if (btnMTab) {
+        btnMTab.addEventListener('click', () => {
+            const input = getActiveInput();
+            if (input && !input.disabled) {
+                tabComplete(input);
+                input.focus();
+            }
+        });
+    }
+
+    if (btnMUp) {
+        btnMUp.addEventListener('click', () => {
+            const input = getActiveInput();
+            if (input && !input.disabled && histIdx < cmdHistory.length - 1) {
+                input.value = cmdHistory[++histIdx];
+                input.focus();
+            }
+        });
+    }
+
+    if (btnMDown) {
+        btnMDown.addEventListener('click', () => {
+            const input = getActiveInput();
+            if (input && !input.disabled) {
+                if (histIdx > 0) {
+                    input.value = cmdHistory[--histIdx];
+                } else {
+                    histIdx = -1;
+                    input.value = '';
+                }
+                input.focus();
+            }
+        });
+    }
+
+    if (btnMCtrlC) {
+        btnMCtrlC.addEventListener('click', () => {
+            const input = getActiveInput();
+            if (input && !input.disabled) {
+                input.disabled = true;
+                addOut('^C');
+                window.pendingSudo = null;
+                newLine();
+                scrollBottom();
+            }
+        });
+    }
+
+    // ── AUTO-LOGIN & ROTEAMENTO INICIAL DE TELAS ──
     const activeUser = sessionStorage.getItem('_403_active_user');
     if (activeUser) {
         username = activeUser;
         userPassword = sessionStorage.getItem('_403_active_pass') || 'user';
         initFS();
-        
+
+        // Oculta as telas de onboarding bruscamente, pois é um recarregamento
+        if ($welcomeScreen) $welcomeScreen.style.display = 'none';
+        if ($beginnerScreen) $beginnerScreen.style.display = 'none';
         $loginScreen.style.display = 'none';
+        
         $termScreen.style.display  = 'flex';
         $termScreen.style.flexDirection = 'column';
+        $termScreen.style.opacity = '1';
         
         printWelcome();
         addOut('[!] Session restored automatically.', 'info');
         
-       // ── RESTAURA O MODO LEARN SE ESTAVA ATIVO NO F5 ──
         if (localStorage.getItem('_403_learning') === '1') {
             const savedLesson = parseInt(localStorage.getItem('_403_lesson')) || 0;
             if (typeof startLearningMode === 'function') {
                 startLearningMode(savedLesson);
             }
+        } else {
+            // NOVO: Só esconde o idioma do Top-Left se o usuário voltar direto pro Terminal Livre
+            if (topLeftLang) topLeftLang.style.display = 'none';
         }
-        
         newLine();
+    } else {
+        if ($welcomeScreen) {
+            $welcomeScreen.style.opacity = '1';
+            $welcomeScreen.style.display = 'flex';
+        }
+        if ($beginnerScreen) $beginnerScreen.style.display = 'none';
+        $loginScreen.style.display = 'none';
+        $termScreen.style.display = 'none';
     }
-    // O 'else' que forçava o login invisível no F5 foi apagado daqui!
 });
 
 
@@ -231,9 +452,21 @@ const $loginInput  = document.getElementById('login-input');
 const $passwordInput = document.getElementById('password-input'); 
 const $passwordLine  = document.getElementById('password-line');  
 
-// ── Login ─────────────────────────────────────────────────────────
+/// ── Login ─────────────────────────────────────────────────────────
 function initLoginListener() {
-    $termScreen.addEventListener('click', () => {
+    $termScreen.addEventListener('click', (e) => {
+        // 1. Evita abrir o teclado se clicar/tocar no painel de missões ou botões
+        if (e.target.closest('#mission-panel') || 
+            e.target.closest('#editor-overlay') || 
+            e.target.tagName.toLowerCase() === 'button') {
+            return;
+        }
+
+        // 2. Evita abrir o teclado se o usuário estiver apenas selecionando/copiando um texto
+        if (window.getSelection().toString().length > 0) {
+            return;
+        }
+
         const activeInput = $terminal.querySelector('.line:last-child input');
         if (activeInput && !activeInput.disabled) {
             activeInput.focus();
@@ -271,6 +504,10 @@ function initLoginListener() {
         $loginScreen.style.display = 'none';
         $termScreen.style.display  = 'flex';
         $termScreen.style.flexDirection = 'column';
+
+        //Esconde o botão de idiomas do topo no terminal livre
+        const topLeftLang = document.getElementById('top-left-lang');
+        if (topLeftLang) topLeftLang.style.display = 'none';
         
         // Inicia o terminal
         printWelcome();
@@ -663,11 +900,31 @@ function openEditor(filename, content, cmd) {
     $termScreen.dataset.editing = '1';
 
     $editName.innerText = `${cmd} - ${filename}`;
+    const hintText = $editName.nextElementSibling;
     
+    // Garante que o texto de dicas sempre apareça (corrige o bug da telinha sumida)
+    hintText.style.display = 'block';
+    
+    // Pega os botões mobile
+    const btn1 = document.getElementById('editor-btn-1');
+    const btn2 = document.getElementById('editor-btn-2');
+    const btn3 = document.getElementById('editor-btn-3');
+
     if (editorMode === 'nano') {
-        $editName.nextElementSibling.innerText = "(Ctrl+X to save & exit | Ctrl+C to cancel)";
+        hintText.innerText = "(Ctrl+X to save & exit | Ctrl+C to cancel)";
+        
+        // Configura botões para NANO
+        if (btn1) { btn1.innerText = 'Save'; btn1.onclick = () => closeEditor(true); btn1.style.display = 'block'; }
+        if (btn2) { btn2.innerText = 'Cancel'; btn2.onclick = () => closeEditor(false); btn2.style.display = 'block'; }
+        if (btn3) { btn3.style.display = 'none'; } 
+        
     } else {
-        $editName.nextElementSibling.innerText = "(Vim: Esc for command mode, then :wq to save or :q! to quit)";
+        hintText.innerText = "(Vim: Esc for command mode, then :wq to save or :q! to quit)";
+        
+        // Configura botões para VIM (Sem o Esc! Apenas Save e Quit diretos)
+        if (btn1) { btn1.innerText = 'Save (:wq)'; btn1.onclick = () => closeEditor(true); btn1.style.display = 'block'; }
+        if (btn2) { btn2.innerText = 'Quit (:q!)'; btn2.onclick = () => closeEditor(false); btn2.style.display = 'block'; }
+        if (btn3) { btn3.style.display = 'none'; }
     }
 
     $textarea.value = content;
@@ -741,7 +998,7 @@ $textarea.addEventListener('keydown', (e) => {
             }
         } else {
             // MODO DE INSERÇÃO VIM
-            if (e.key === 'Enter') {
+            if (e.key === 'i') {
                 autoIndent(e); // <--- NOVO
             }
         }

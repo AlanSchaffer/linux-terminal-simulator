@@ -1002,8 +1002,17 @@ const coreCommands = {
     'chmod': (params, flags, stdin, cmd, args) => {
         if (params.length < 2) return 'usage: chmod MODE FILE';
         const path = resolvePath(params[1]);
-        if (!vfs[resolvePath(params[1])]) return `chmod: cannot access '${params[1]}': No such file or directory`;
-        vfs[path].perms = params[0];
+        const node = vfs[path];
+        if (!node) return `chmod: cannot access '${params[1]}': No such file or directory`;
+        
+        // Se o usuário usar +x, converte nativamente para 755 (executável)
+        if (params[0] === '+x') {
+            node.perms = '755';
+        } else if (params[0] === '-x') {
+            node.perms = '644';
+        } else {
+            node.perms = params[0];
+        }
         return null;
     },
 
