@@ -105,7 +105,7 @@ body {
 
 /* ── HAMBURGER MENU (ESTILO TERMINAL PREMIUM) ──────────────────────────────────── */
 #menu-container {
-    position: absolute;
+    position: fixed;
     top: 15px;
     right: 20px;
     z-index: 1000;
@@ -726,7 +726,7 @@ html, body {
 
 /* ── BOTÃO DE IDIOMA TOP-LEFT (ONBOARDING) ── */
 #top-left-lang {
-    position: absolute;
+    position: fixed;
     top: 20px;
     left: 20px;
     cursor: pointer;
@@ -781,7 +781,7 @@ html, body {
     background: rgba(0, 0, 0, 0.85);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
@@ -842,6 +842,12 @@ html, body {
         display: flex;
     }
     
+    /* Organizar o botão de ajuda */
+    #global-help-btn {
+        bottom: 70px;
+        right: 15px;
+    }
+
     /* Removemos o padding forçado do terminal-screen para não criar espaçamento extra desnecessário */
     #terminal-screen {
         padding-top: 10px; 
