@@ -633,7 +633,7 @@ function newLine(isPassword = false) {
             e.preventDefault();
             if (!isPassword) tabComplete(input);
 
-        }  else if (e.ctrlKey && e.key === 'l') {
+        }  else if (e.ctrlKey && e.key.toLowerCase() === 'l') {
             e.preventDefault();
             
             // 1. Pega o valor que o usuário já digitou (caso ele esteja no meio de um comando)
@@ -981,38 +981,46 @@ $textarea.addEventListener('keydown', (e) => {
         }
     } 
     // ── VIM MODE ──
-    else if (editorMode === 'vim') {
-        if (e.key === 'Escape') {
-            isVimCommandMode = true;
-            vimCommandBuffer = '';
-            $editName.nextElementSibling.innerText = "-- COMMAND MODE -- (type :wq or :q!)";
-            e.preventDefault();
-        } else if (isVimCommandMode) {
-            e.preventDefault(); 
-            
-            if (e.key === 'Enter') {
-                if (vimCommandBuffer === ':wq' || vimCommandBuffer === ':x') {
-                    closeEditor(true);
-                } else if (vimCommandBuffer === ':q!' || vimCommandBuffer === ':q') {
-                    closeEditor(false);
-                } else {
-                    isVimCommandMode = false;
-                    $editName.nextElementSibling.innerText = "-- INSERT MODE -- (Esc to command mode)";
-                }
-            } else if (e.key === 'Backspace') {
-                vimCommandBuffer = vimCommandBuffer.slice(0, -1);
-                $editName.nextElementSibling.innerText = `-- COMMAND MODE -- ${vimCommandBuffer}`;
-            } else if (e.key.length === 1) { 
-                vimCommandBuffer += e.key; 
-                $editName.nextElementSibling.innerText = `-- COMMAND MODE -- ${vimCommandBuffer}`;
+else if (editorMode === 'vim') {
+    if (e.key === 'Escape') {
+        isVimCommandMode = true;
+        vimCommandBuffer = '';
+        $editName.nextElementSibling.innerText = "-- COMMAND MODE -- (type :wq or :q!)";
+        e.preventDefault();
+    } else if (isVimCommandMode) {
+        e.preventDefault();
+
+        // FIX: Permite entrar no modo de inserção ao apertar 'i' (comportamento real do Vim)
+        if (vimCommandBuffer === '' && e.key === 'i') {
+            isVimCommandMode = false;
+            $editName.nextElementSibling.innerText = "-- INSERT MODE -- (Esc to command mode)";
+            return;
+        }
+
+        if (e.key === 'Enter') {
+            if (vimCommandBuffer === ':wq' || vimCommandBuffer === ':x') {
+                closeEditor(true);
+            } else if (vimCommandBuffer === ':q!' || vimCommandBuffer === ':q') {
+                closeEditor(false);
+            } else {
+                isVimCommandMode = false;
+                $editName.nextElementSibling.innerText = "-- INSERT MODE -- (Esc to command mode)";
             }
-        } else {
-            // MODO DE INSERÇÃO VIM
-            if (e.key === 'i') {
-                autoIndent(e); // <--- NOVO
+        } else if (e.key === 'Backspace') {
+            vimCommandBuffer = vimCommandBuffer.slice(0, -1);
+            $editName.nextElementSibling.innerText = `-- COMMAND MODE -- ${vimCommandBuffer}`;
+        } else if (e.key.length === 1) { 
+            vimCommandBuffer += e.key; 
+            $editName.nextElementSibling.innerText = `-- COMMAND MODE -- ${vimCommandBuffer}`;
+        }
+    } else {
+        // MODO DE INSERÇÃO VIM
+        // FIX: O auto-indent deve ocorrer no Enter, e não na letra 'i'
+        if (e.key === 'Enter') {
+            autoIndent(e); 
             }
         }
-    }
+    }   
 });
 
 function closeEditor(save) {

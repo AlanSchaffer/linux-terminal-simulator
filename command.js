@@ -1000,20 +1000,23 @@ const coreCommands = {
     },
 
     'chmod': (params, flags, stdin, cmd, args) => {
-        if (params.length < 2) return 'usage: chmod MODE FILE';
-        const path = resolvePath(params[1]);
-        const node = vfs[path];
-        if (!node) return `chmod: cannot access '${params[1]}': No such file or directory`;
-        
-        // Se o usuário usar +x, converte nativamente para 755 (executável)
-        if (params[0] === '+x') {
-            node.perms = '755';
-        } else if (params[0] === '-x') {
-            node.perms = '644';
-        } else {
-            node.perms = params[0];
-        }
-        return null;
+    // FIX: Utilizar 'args' no lugar de 'params', pois '-x' é filtrado como flag pelo parser global
+    if (args.length < 2) return 'usage: chmod MODE FILE';
+    const mode = args[0];
+    const file = args[1];
+    
+    const path = resolvePath(file);
+    const node = vfs[path];
+    if (!node) return `chmod: cannot access '${file}': No such file or directory`;
+    
+    if (mode === '+x') {
+        node.perms = '755';
+    } else if (mode === '-x') {
+        node.perms = '644';
+    } else {
+        node.perms = mode;
+    }
+    return null;
     },
 
     'chown': (params, flags, stdin, cmd, args) => { return params.length < 2 ? 'usage: chown OWNER FILE' : null; },
