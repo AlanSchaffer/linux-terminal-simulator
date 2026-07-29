@@ -110,6 +110,8 @@ function transitionTo(hideScreen, showScreen, callback) {
 
 window.addEventListener('DOMContentLoaded', () => {
     initLoginListener();
+    // Renderiza os ícones da biblioteca Lucide
+    lucide.createIcons();
 
     // ── REFERÊNCIAS DO MENU ──
     const hamburgerBtn = document.getElementById('hamburger-btn');

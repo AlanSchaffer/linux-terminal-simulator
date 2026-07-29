@@ -1,9 +1,10 @@
 // ═══════════════════════════════════════════════════════════════════
 //  COMMAND.JS — Cérebro (interpretador de comandos)
+// É aqui que todos os comandos do terminal estão.
+// Inicialmente fiz todos como cases, mas mudei para objetos para mais performance
 // ═══════════════════════════════════════════════════════════════════
 
-// hasFlag agora é uma função de nível superior (antes era recriada a cada
-// chamada de run()), recebendo o array de flags da própria invocação.
+
 // Os handlers chamam hasFlag(flags, '-x') em vez de hasFlag('-x').
 function hasFlag(flags, ...f) {
     // Verifica se alguma das flags procuradas está exatamente no array de flags
@@ -1224,9 +1225,9 @@ const coreCommands = {
     },
 
     'watch': async (params, flags, stdin, cmd, args) => {
-        if (!params.length) return 'watch: missing command';
-        const r = await run(params[0], params.slice(1), null); 
-        return `(watch: '${params.join(' ')}' every 2s — displaying once)\n`+(run(params[0], params.slice(1), null)||'');
+    if (!params.length) return 'watch: missing command';
+    const r = await run(params[0], params.slice(1), null); 
+    return `(watch: '${params.join(' ')}' every 2s — displaying once)\n` + (r || '');
     },
 
     'xargs': async (params, flags, stdin, cmd, args) => { const r = await run(params[0], params.slice(1), null); return stdin ? (run(params[0]||'echo', [stdin], null)||'') : '(xargs: empty stdin)'; },
@@ -1992,7 +1993,10 @@ const coreCommands = {
     'sysctl': (params, flags, stdin, cmd, args) => {
         if (!params.length && !flags.length) return 'usage: sysctl [-a] [VARIABLE[=VALUE]]';
         if (hasFlag(flags, '-a')) return `kernel.hostname = ${HOSTNAME}\nkernel.ostype = Linux\nkernel.osrelease = 6.1.0-18-amd64\nnet.ipv4.ip_forward = 0\nnet.ipv4.tcp_syncookies = 1\nvm.swappiness = 60\nfs.file-max = 9223372036854775807`;
-        if (params && params.includes('=')) { const [k,v]=params.split('='); return `${k} = ${v}`; }
+        if (params.length && params[0].includes('=')) { 
+            const [k, v] = params[0].split('='); 
+            return `${k} = ${v}`; 
+        }
         if (params) return `${params[0]} = 1`;
         return '(sysctl: parameter not specified)';
     },
@@ -2054,7 +2058,7 @@ const coreCommands = {
         if (!params.length) return 'usage: truncate -s SIZE FILE';
         const sIdx = args.indexOf('-s');
         const size = sIdx !== -1 ? args[sIdx+1] : '0';
-        if (!params) return 'truncate: missing file operand';
+        if (!params.length) return 'truncate: missing file operand';
         const abs = resolvePath(params);
         if (!vfs[abs]) fsTouch(abs,'');
         vfs[abs].content = '';
@@ -2388,7 +2392,7 @@ const coreCommands = {
     },
 
     'script': (params, flags, stdin, cmd, args) => {
-        const file = params || 'typescript';
+        const file = params[0] || 'typescript';
         fsTouch(resolvePath(file), `Script started on ${new Date().toLocaleString('en-US')}`);
         return `Script started, file is '${file}'\n(script: use 'exit' to stop recording — simulated)`;
     },

@@ -4,18 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="terminal.css">
+    <!-- Lucide Icons CDN CORRIGIDO -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <title>_403</title>
 </head>
 <body>
 
    <div id="menu-container">
         <div id="hamburger-btn">
-            <span class="hamburger-icon">☰</span>
+            <i data-lucide="menu" class="menu-icon"></i>
         </div>
 
         <div id="main-menu">
             <div class="menu-item" id="menu-theme-toggle">
-                <span class="menu-icon">⚙</span> Themes <span class="arrow">▶</span>
+                <i data-lucide="palette" class="menu-icon"></i> Themes <i data-lucide="chevron-right" class="arrow"></i>
             </div>
             <div id="theme-submenu"> 
                 <button>Default</button>
@@ -28,26 +30,26 @@
             </div>
 
             <div class="menu-item" id="menu-lang-toggle">
-                <span class="menu-icon">🌐</span> <span id="lang-label">Lang: EN</span>
+                <i data-lucide="globe" class="menu-icon"></i> <span id="lang-label">Lang: EN</span>
             </div>
 
             <div class="menu-item" id="menu-learning-btn">
-                <span class="menu-icon">📖</span> <span class="learning-label">Learn</span>
+                <i data-lucide="book-open" class="menu-icon"></i> <span class="learning-label">Learn</span>
             </div>
 
             <div class="menu-item" id="menu-about-btn">
-                <span class="menu-icon">👨‍💻</span> <span class="about-label">About Me</span>
+                <i data-lucide="user" class="menu-icon"></i> <span class="about-label">About Me</span>
             </div>
 
             <div class="menu-item" id="menu-exit-btn">
-                <span class="menu-icon">🚪</span> <span class="exit-label">Exit</span>
+                <i data-lucide="log-out" class="menu-icon"></i> <span class="exit-label">Exit</span>
             </div>
 
             <div class="menu-separator"></div>
         </div>
     </div>
     <div id="top-left-lang">
-        <span class="menu-icon">🌐</span> <span id="top-lang-label">EN</span>
+        <i data-lucide="globe" class="menu-icon"></i> <span id="top-lang-label">EN</span>
     </div>
     <div id="welcome-screen" class="screen-container">
         <!-- BOTÃO DE IDIOMA DO ONBOARDING (Canto Superior Esquerdo) -->
@@ -131,15 +133,16 @@ _____ |_|  \___/ |____/</pre>
         </div>
         
         <div id="terminal"></div>
-        <div id="scroll-anchor"></div> ```
+        <div id="scroll-anchor"></div>
     </div>
 
-    <!-- Biblioteca para funcionar o python -->
+    <!-- Biblioteca para funcionar o python CORRIGIDA -->
     <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+    
     <!-- Arquivos JS -->
-<script src="learning.js"></script>
-<script src="terminal.js"></script>
-<script src="vfs.js"></script>
-<script src="command.js"></script>
+    <script src="learning.js"></script>
+    <script src="terminal.js"></script>
+    <script src="vfs.js"></script>
+    <script src="command.js"></script>
 </body>
 </html>
