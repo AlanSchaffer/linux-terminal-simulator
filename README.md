@@ -64,7 +64,7 @@ Since this project is built entirely with Vanilla Web Technologies (HTML, CSS, J
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/AlanSchaffer/linux-terminal-simulator.git](https://github.com/YOUR_USERNAME/linux-terminal-simulator.git)
+   git clone https://github.com/AlanSchaffer/linux-terminal-simulator.git
 
 2. **Navigate to the folder:**
    ```bash
