@@ -49,15 +49,25 @@ function fsList(path) {
 
 function fsTouch(path, content = '', customPerms = null) {
     const abs = resolvePath(path);
-    // Garante que o arquivo herda o dono ativo e permissão padrão 644
-    vfs[abs] = { 
-        type: 'file', 
-        content, 
-        owner: effectiveUser || 'root', 
-        perms: customPerms || '644', 
-        size: content.length, 
-        mdate: nowStr() 
-    };
+    const existing = vfs[abs];
+    
+    if (existing) {
+        // Se o arquivo já existe, apenas atualiza o conteúdo e a data, preservando dono e permissões
+        existing.content = content;
+        existing.size = content.length;
+        existing.mdate = nowStr();
+        if (customPerms) existing.perms = customPerms;
+    } else {
+        // Se for um arquivo novo, cria do zero, corrigindo o bug antigo que fazia voltar a ser 644
+        vfs[abs] = { 
+            type: 'file', 
+            content, 
+            owner: effectiveUser || 'root', 
+            perms: customPerms || '644', 
+            size: content.length, 
+            mdate: nowStr() 
+        };
+    }
 }
 
 function fsMkdir(path, customPerms = null) {

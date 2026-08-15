@@ -6,8 +6,8 @@ let username = '';
 const HOSTNAME = '_403';
 let cmdHistory = JSON.parse(localStorage.getItem('_403_history') || '[]');
 let histIdx = -1;
-let aliases = {};
-let userPassword = ''
+let userPassword = '';
+let aliases = JSON.parse(localStorage.getItem('_403_aliases') || '{}');
 window.AVAILABLE_THEMES = ['default', 'dracula', 'gruvbox', 'matrix', 'nord', 'catppuccin', 'cyberpunk'];
 window.currentLang = localStorage.getItem('_403_lang') || 'en';
 
@@ -529,13 +529,14 @@ function printWelcome() {
 }
 
 
-function promptHTML() {
+function promptHTML(lastCommandFailed = false) {
+    const dollarColor = lastCommandFailed ? 'var(--art-color)' : 'var(--text-color)';
     return `<span class="p-user">${username}</span>` +
            `<span class="p-at">@</span>` +
            `<span class="p-host">${HOSTNAME}</span>` +
            `<span class="p-at">:</span>` +
            `<span class="p-path">${shortPath()}</span>` +
-           `<span class="p-dollar">$ </span>`;
+           `<span class="p-dollar" style="color: ${dollarColor}; font-weight: bold;">$ </span>`;
 }
 
 function newLine(isPassword = false) {
@@ -556,6 +557,36 @@ function newLine(isPassword = false) {
     histIdx = -1;
 
     input.addEventListener('keydown', async (e) => {
+        // ── INTERCEPTADOR DE CONFIRMAÇÃO DO TAB (y/n) ──
+        if (input.tabConfirmation) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Ignora teclas de sistema/modificadoras
+            if (['Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Tab'].includes(e.key)) return;
+            
+            const matches = input.tabConfirmation;
+            input.tabConfirmation = null; // Libera a trava
+
+            const key = e.key.toLowerCase();
+            const currentVal = input.value;
+            input.disabled = true;
+
+            // Se for 'y', exibe todas as opções na tela
+            if (key === 'y') {
+                addOut(matches.join('  '));
+            } 
+            // Se for 'n' (ou qualquer outra tecla), simplesmente não imprime nada (igual ao Bash)
+
+            // Recria a linha de prompt com o texto que o usuário já tinha digitado
+            newLine();
+            const newInput = $terminal.querySelector('.line:last-child input');
+            newInput.value = currentVal;
+            newInput.focus();
+            scrollBottom();
+            return; // Impede que caia no Enter ou envie 'n' para o histórico
+        }
+
         if (e.key === 'Enter') {
             const raw = input.value; // Para senha, pegamos o valor sem trim()
             input.disabled = true;
@@ -599,25 +630,27 @@ function newLine(isPassword = false) {
             
             // ── FLUXO DE COMANDO NORMAL ──
             const rawTrimmed = raw.trim();
-            if (rawTrimmed) {
+            if (rawTrimmed && cmdHistory[0] !== rawTrimmed) {
                 cmdHistory.unshift(rawTrimmed);
                 if (cmdHistory.length > 200) cmdHistory.pop();
                 localStorage.setItem('_403_history', JSON.stringify(cmdHistory));
             }
             
+            let commandSuccess = true; // <-- Captura o status
             try {
-                await exec(rawTrimmed);
+                commandSuccess = await exec(rawTrimmed); 
             } catch (err) {
                 addOut(`[Erro Interno do Terminal]: ${err.message}`, 'err');
+                commandSuccess = false;
             }
             
             scrollBottom();
             
-            // Verifica se o comando que acabou de rodar (ex: sudo) ativou a espera por senha
             if (window.pendingSudo) {
-                newLine(true); // Cria a próxima linha em MODO SENHA
+                newLine(true); 
             } else if (!$termScreen.dataset.exiting && !$termScreen.dataset.editing) {
-                newLine();
+                // Passa 'true' para o lastCommandFailed se commandSuccess for false
+                newLine(false, commandSuccess === false); 
             }
 
         } else if (e.key === 'ArrowUp') {
@@ -691,19 +724,50 @@ function addOut(text, cls = '') {
 function tabComplete(input) {
     const val = input.value;
     const toks = val.trimStart().split(' ');
-    const last = toks[toks.length - 1];
-    const dirPart  = last.includes('/') ? last.slice(0, last.lastIndexOf('/') + 1) : '';
-    const filePart = last.slice(dirPart.length);
-    const searchIn = dirPart ? resolvePath(dirPart) : cwd;
-    const matches  = fsList(searchIn)
-        .filter(c => c.name.startsWith(filePart))
-        .map(c => c.name + (c.type === 'dir' ? '/' : ''));
+    let matches = [];
 
-    if (matches.length === 1) {
-        toks[toks.length - 1] = dirPart + matches[0];
-        input.value = toks.join(' ');
-    } else if (matches.length > 1) {
-        addOut(matches.join('  '));
+    if (toks.length === 1) {
+        const cmdSearch = toks[0];
+        // Pega todos os comandos e aliases (removendo duplicatas e ordenando alfabeticamente)
+        const allCmds = [...new Set(Object.keys(coreCommands).concat(Object.keys(aliases)))].sort();
+        matches = allCmds.filter(c => c.startsWith(cmdSearch));
+        
+        if (matches.length === 1) {
+            input.value = matches[0] + ' ';
+            return;
+        }
+    } else {
+        const last = toks[toks.length - 1];
+        const dirPart  = last.includes('/') ? last.slice(0, last.lastIndexOf('/') + 1) : '';
+        const filePart = last.slice(dirPart.length);
+        const searchIn = dirPart ? resolvePath(dirPart) : cwd;
+        matches  = fsList(searchIn)
+            .filter(c => c.name.startsWith(filePart))
+            .map(c => c.name + (c.type === 'dir' ? '/' : ''));
+
+        if (matches.length === 1) {
+            toks[toks.length - 1] = dirPart + matches[0];
+            input.value = toks.join(' ');
+            return;
+        }
+    }
+
+    if (matches.length > 1) {
+        // Emula o bash: se for maior que 50 opções, bloqueia e pergunta ao usuário
+        if (matches.length > 50) {
+            addOut(`Display all ${matches.length} possibilities? (y or n)`);
+            input.tabConfirmation = matches; // Ativa a trava no `keydown`
+        } else {
+            addOut(matches.join('  '));
+            // Congela a linha atual e recria o prompt na linha de baixo (Igual ao terminal real)
+            const currentVal = input.value;
+            input.disabled = true;
+            newLine();
+            const newInput = $terminal.querySelector('.line:last-child input');
+            newInput.value = currentVal;
+            newInput.focus();
+        }
+        scrollBottom();
     }
 }
 
@@ -830,62 +894,50 @@ function tokenize(str) {
     return tokens;
 }
 
-// ── Command execution (CORRIGIDO VIA TOKENIZAÇÃO REAL) ────────────────
+// ── Command execution ──────────────────────────────────────────
 async function exec(raw) {
-    if (!raw) return;
+    if (!raw) return true;
 
-    // Usamos o seu próprio tokenize para separar o comando em blocos seguros (respeitando aspas)
     const allTokens = tokenize(raw);
-    if (!allTokens.length) return;
+    if (!allTokens.length) return true;
 
     let currentTokens = [];
+    let lastSuccess = true; 
     
     for (let i = 0; i < allTokens.length; i++) {
         const token = allTokens[i];
 
-        // Se o token for um operador lógico REAL (fora de aspas, o seu tokenize já isolou)
         if (token === '&&') {
-            // Remonta o comando atual de forma segura antes do operador
-            const cmdString = currentTokens.map(t => /[ |><&$]/.test(t) ? `"${t}"` : t).join(' ');
-            const success = await execSingle(cmdString);
-            
-            // Se falhar, aborta a linha inteira imediatamente
-            if (success === false) return;
-            
+            // FIX: Remonta os comandos apenas protegendo espaços, sem quebrar pipes (|) ou redirects (>)
+            const cmdString = currentTokens.map(t => (t.includes(' ') || t === '') ? `"${t}"` : t).join(' ');
+            lastSuccess = await execSingle(cmdString);
+            if (lastSuccess === false) return false;
             currentTokens = [];
             continue;
         }
 
         if (token === '||') {
-            // Remonta o comando atual de forma segura antes do operador
-            const cmdString = currentTokens.map(t => /[ |><&$]/.test(t) ? `"${t}"` : t).join(' ');
-            const success = await execSingle(cmdString);
-            
-            // Se tiver sucesso, aborta o resto da linha (pulando o OR)
-            if (success !== false) return;
-            
+            const cmdString = currentTokens.map(t => (t.includes(' ') || t === '') ? `"${t}"` : t).join(' ');
+            lastSuccess = await execSingle(cmdString);
+            if (lastSuccess !== false) return true;
             currentTokens = [];
             continue;
         }
 
-        // Caso contrário, acumula o token no comando atual
         currentTokens.push(token);
     }
 
-    // Executa o último comando restante na cadeia
     if (currentTokens.length > 0) {
-        const cmdString = currentTokens.map(t => /[ |><&$]/.test(t) ? `"${t}"` : t).join(' ');
-        await execSingle(cmdString);
+        const cmdString = currentTokens.map(t => (t.includes(' ') || t === '') ? `"${t}"` : t).join(' ');
+        lastSuccess = await execSingle(cmdString);
     }
 
-    // ── NOVO INTERCEPTADOR DO LEARNING MODE ──
-    // Avalia a string original completa (ex: "mkdir secure && chmod 700 secure")
     if (typeof isLearning !== 'undefined' && isLearning) {
         const lessonFeedback = checkLesson(raw, null);
-        if (lessonFeedback) {
-            addOut(lessonFeedback);
-        }
+        if (lessonFeedback) addOut(lessonFeedback);
     }
+
+    return lastSuccess; 
 }
 
 

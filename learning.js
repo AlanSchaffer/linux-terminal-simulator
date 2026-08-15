@@ -822,8 +822,8 @@ const missions = [
             pt: "Primeiro Contato com Vim"
         },
         instruction: {
-            en: "It's time to face the beast. The terminal's legendary text editor.\n\nTask: Open a file named 'notes.txt' using vim.",
-            pt: "É hora de enfrentar a besta. O lendário editor de texto do terminal.\n\nTarefa: Abra um arquivo chamado 'notes.txt' usando o vim."
+            en: "It's time to face the beast. The terminal's legendary text editor.\n\nTask: Open a file named 'notes.txt' using vim.\n\n⚠️ TIP: To exit Vim later, type :wq and press ENTER!",
+            pt: "É hora de enfrentar a besta. O lendário editor de texto do terminal.\n\nTarefa: Abra um arquivo chamado 'notes.txt' usando o vim.\n\n⚠️ DICA: Para sair do Vim depois, digite :wq e aperte ENTER!"
         },
         expectedCommand: "vim notes.txt",
         hints: {
@@ -1034,6 +1034,7 @@ function toggleButtonUI(active) {
 }
 
 function printMission() {
+    currentHintIndex = 0;
     const lesson = missions[currentLesson];
     const missionPanel = document.getElementById('mission-panel');
     const lang = window.currentLang || 'en';
@@ -1134,6 +1135,12 @@ function prepareMissionEnvironment(lessonIndex) {
     cwd = `/home/${username}`;
     if (envVars) envVars.PWD = cwd;
 
+    // FIX: Garante que o curl está instalado para as missões avançadas
+    if (!installedPackages.includes('curl')) {
+        installedPackages.push('curl');
+        if (typeof savePackages === 'function') savePackages();
+    }
+
     // 2. Descobre qual é a missão atual
     const id = missions[lessonIndex].id;
 
@@ -1218,18 +1225,34 @@ function stopLearningMode() {
 
 function checkLesson(cmdInput, cmdOutput) {
     if (!isLearning) return null;
-    const raw = cmdInput.trim().replace(/\s+/g, ' ');
-    if (raw === '') return null;
-
-    if (raw.toLowerCase() === 'hint') {
+    
+    if (cmdInput.trim().toLowerCase() === 'hint') {
         window.triggerHint();
         return ''; 
     }
 
+    // --- NORMALIZADOR DE SINTAXE DO ALUNO ---
+    // 1. Remove aspas simples e duplas para não reprovar por causa de "texto" vs 'texto' vs texto
+    let raw = cmdInput.replace(/["']/g, '');
+    // 2. Garante que operadores (>, >>, |, &&) tenham exatamente 1 espaço ao redor e reduz espaços duplos
+    raw = raw.replace(/([|]|>>|>|&&)/g, ' $1 ').replace(/\s+/g, ' ').trim();
+
+    if (raw === '') return null;
+
     const lesson = missions[currentLesson];
     const lang = window.currentLang || 'en';
     
-    const isMatch = raw === lesson.expectedCommand || (lesson.acceptedCommands && lesson.acceptedCommands.includes(raw));
+    // --- NORMALIZADOR DA MISSÃO (Gabarito) ---
+    const expected = lesson.expectedCommand.replace(/["']/g, '').replace(/([|]|>>|>|&&)/g, ' $1 ').replace(/\s+/g, ' ').trim();
+    
+    let isMatch = (raw === expected);
+    
+    if (!isMatch && lesson.acceptedCommands) {
+        isMatch = lesson.acceptedCommands.some(cmd => {
+            const acc = cmd.replace(/["']/g, '').replace(/([|]|>>|>|&&)/g, ' $1 ').replace(/\s+/g, ' ').trim();
+            return raw === acc;
+        });
+    }
     
     if (isMatch) {
         const outStr = (cmdOutput || '').toLowerCase();
@@ -1247,8 +1270,8 @@ function checkLesson(cmdInput, cmdOutput) {
         output += `[ ${lang === 'en' ? 'MISSION REPORT' : 'RELATÓRIO DA MISSÃO'} ]\n${lesson.successExplanation[lang]}\n`;
         output += `-------------------------------------------------\n`;
         output += lang === 'en' 
-            ? `(Press ENTER to clear the screen and start the next mission)\n`
-            : `(Pressione ENTER para limpar a tela e iniciar a próxima missão)\n`; 
+            ? `(Press ENTER to clear the screen)\n`
+            : `(Pressione ENTER para limpar a tela)\n`; 
         
         if (currentLesson < missions.length) {
             addOut(output, 'ok');

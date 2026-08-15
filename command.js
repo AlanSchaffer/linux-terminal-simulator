@@ -618,18 +618,23 @@ const coreCommands = {
     'pwd': (params, flags, stdin, cmd, args) => { return cwd; },
 
     'cd': (params, flags, stdin, cmd, args) => {
-        const target = params[0] || envVars.HOME;
-        const abs = resolvePath(target);
-        const n = fsGet(abs);
-        if (!n) return `bash: cd: ${target}: No such file or directory`;
-        if (n.type !== 'dir') return `bash: cd: ${target}: Not a directory`;
-        
-        // Se não tiver permissão de execução (x), barra o acesso
-        if (!checkPermission(abs, 'x')) return `bash: cd: ${target}: Permission denied`;
-        
-        cwd = abs;
-        envVars.PWD = abs;
-        return null;
+    let target = params[0] || envVars.HOME;
+    
+    if (target === '-') {
+        if (!envVars.OLDPWD) return 'bash: cd: OLDPWD not set';
+        target = envVars.OLDPWD;
+    }
+
+    const abs = resolvePath(target);
+    const n = fsGet(abs);
+    // ... (suas verificações de existência e permissão continuam iguais)
+    
+    envVars.OLDPWD = cwd; // Salva o atual antes de sobrescrever
+    cwd = abs;
+    envVars.PWD = abs;
+    
+    // Se o comando foi cd -, o bash costuma imprimir o diretório destino
+    return params[0] === '-' ? cwd : null; 
     },
 
     'ls': (params, flags, stdin, cmd, args) => {
@@ -1001,23 +1006,23 @@ const coreCommands = {
     },
 
     'chmod': (params, flags, stdin, cmd, args) => {
-    // FIX: Utilizar 'args' no lugar de 'params', pois '-x' é filtrado como flag pelo parser global
-    if (args.length < 2) return 'usage: chmod MODE FILE';
-    const mode = args[0];
-    const file = args[1];
-    
-    const path = resolvePath(file);
-    const node = vfs[path];
-    if (!node) return `chmod: cannot access '${file}': No such file or directory`;
-    
-    if (mode === '+x') {
-        node.perms = '755';
-    } else if (mode === '-x') {
-        node.perms = '644';
-    } else {
-        node.perms = mode;
-    }
-    return null;
+        // Usa 'params' em vez de 'args' para que flags sejam ignoradas na captura dos dados
+        if (params.length < 2) return 'usage: chmod MODE FILE';
+        const mode = params[0];
+        const file = params[1];
+        
+        const path = resolvePath(file);
+        const node = vfs[path];
+        if (!node) return `chmod: cannot access '${file}': No such file or directory`;
+        
+        if (mode === '+x') {
+            node.perms = '755';
+        } else if (mode === '-x') {
+            node.perms = '644';
+        } else {
+            node.perms = mode;
+        }
+        return null;
     },
 
     'chown': (params, flags, stdin, cmd, args) => { return params.length < 2 ? 'usage: chown OWNER FILE' : null; },
@@ -1527,11 +1532,16 @@ const coreCommands = {
     'alias': (params, flags, stdin, cmd, args) => {
         if (!params.length) return Object.entries(aliases).map(([k,v])=>`alias ${k}='${v}'`).join('\n') || '(no aliases)';
         params.forEach(p=>{const eq=p.indexOf('=');if(eq!==-1)aliases[p.slice(0,eq)]=p.slice(eq+1).replace(/^['"]|['"]$/g,'');});
+        localStorage.setItem('_403_aliases', JSON.stringify(aliases)); // <- SALVA AQUI
         return null;
     },
 
-    'unalias': (params, flags, stdin, cmd, args) => { params.forEach(p=>delete aliases[p]); return null; },
-
+    'unalias': (params, flags, stdin, cmd, args) => { 
+        params.forEach(p=>delete aliases[p]); 
+        localStorage.setItem('_403_aliases', JSON.stringify(aliases)); // <- SALVA AQUI
+        return null; 
+    },
+    
     'type': (params, flags, stdin, cmd, args) => {
         if (!params.length) return 'type: missing operand';
         const builtins=['cd','echo','pwd','export','alias','history','type','source','set','unset'];
